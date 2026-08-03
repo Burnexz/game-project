@@ -29,6 +29,7 @@
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
             border: 2px solid #2a3447;
+            position: relative;
         }
 
         /* Browser Address Bar */
@@ -109,12 +110,7 @@
             align-items: center;
         }
 
-        .banner-content img {
-            max-width: 45%;
-            border-radius: 5px;
-        }
-
-        /* Auth Buttons (Masuk & Daftar) */
+        /* Auth Buttons */
         .auth-buttons {
             display: flex;
             margin-top: 10px;
@@ -201,7 +197,7 @@
             letter-spacing: 2px;
         }
 
-        /* Bottom Navbar */
+        /* Bottom Navigation */
         .bottom-nav {
             display: flex;
             justify-content: space-around;
@@ -218,6 +214,8 @@
             font-size: 10px;
             cursor: pointer;
             text-decoration: none;
+            background: none;
+            border: none;
         }
 
         .nav-item.active {
@@ -228,6 +226,94 @@
             display: block;
             font-size: 18px;
             margin-bottom: 2px;
+        }
+
+        /* Modal Umum (Login & Register) */
+        .modal {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background-color: #121622;
+            width: 100%;
+            max-width: 350px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #1e90ff;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 20px;
+            color: #b0bec5;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            color: #ffffff;
+        }
+
+        .modal-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #1e90ff;
+            margin-bottom: 15px;
+            text-align: center;
+            letter-spacing: 1px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 11px;
+            color: #b0bec5;
+            margin-bottom: 4px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 9px 12px;
+            background-color: #0b0f19;
+            border: 1px solid #2a3447;
+            border-radius: 6px;
+            color: #ffffff;
+            font-size: 12px;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #1e90ff;
+        }
+
+        .btn-submit-form {
+            width: 100%;
+            padding: 10px;
+            background-color: #1e90ff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 13px;
+            cursor: pointer;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -244,7 +330,7 @@
         <!-- Header -->
         <div class="header">
             <div class="logo">BURNEXZ<span>TOTO</span></div>
-            <button class="btn-bergabung">BERGABUNG</button>
+            <button class="btn-bergabung btn-trigger-daftar">BERGABUNG</button>
         </div>
 
         <!-- Banner & Auth -->
@@ -259,8 +345,8 @@
                 <div style="font-size: 35px;">🐉</div>
             </div>
             <div class="auth-buttons">
-                <button class="btn-masuk">➔ MASUK</button>
-                <button class="btn-daftar">+ DAFTAR</button>
+                <button class="btn-masuk btn-trigger-masuk">➔ MASUK</button>
+                <button class="btn-daftar btn-trigger-daftar">+ DAFTAR</button>
             </div>
         </div>
 
@@ -284,12 +370,12 @@
             <a href="#" class="nav-item active">
                 <span>🏠</span>Beranda
             </a>
-            <a href="#" class="nav-item">
+            <button class="nav-item btn-trigger-daftar" style="background:none; border:none; cursor:pointer;">
                 <span>➕</span>Daftar
-            </a>
-            <a href="#" class="nav-item">
+            </button>
+            <button class="nav-item btn-trigger-masuk" style="background:none; border:none; cursor:pointer;">
                 <span>👤</span>Masuk
-            </a>
+            </button>
             <a href="#" class="nav-item">
                 <span>🏷️</span>Promo
             </a>
@@ -297,7 +383,114 @@
                 <span>🎧</span>Live Chat
             </a>
         </div>
+
+        <!-- Modal Pendaftaran -->
+        <div id="registerModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn close-register">&times;</span>
+                <div class="modal-title">FORMULIR PENDAFTARAN</div>
+                <form>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" placeholder="Buat username unik" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kata Sandi</label>
+                        <input type="password" placeholder="Minimal 6 karakter" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nomor Telepon / WhatsApp</label>
+                        <input type="text" placeholder="Contoh: 08123456789" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Bank / E-Wallet</label>
+                        <select required>
+                            <option value="">Pilih Bank / E-Wallet</option>
+                            <option value="bca">BCA</option>
+                            <option value="mandiri">Mandiri</option>
+                            <option value="bni">BNI</option>
+                            <option value="bri">BRI</option>
+                            <option value="dana">DANA</option>
+                            <option value="ovo">OVO</option>
+                            <option value="gopay">GOPAY</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Rekening</label>
+                        <input type="text" placeholder="Sesuai buku rekening" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Nomor Rekening</label>
+                        <input type="text" placeholder="Nomor rekening valid" required>
+                    </div>
+                    <button type="submit" class="btn-submit-form">DAFTAR SEKARANG</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Modal Masuk (Login) -->
+        <div id="loginModal" class="modal">
+            <div class="modal-content">
+                <span class="close-btn close-login">&times;</span>
+                <div class="modal-title">MASUK AKUN</div>
+                <form>
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" placeholder="Masukkan username Anda" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kata Sandi</label>
+                        <input type="password" placeholder="Masukkan kata sandi" required>
+                    </div>
+                    <button type="submit" class="btn-submit-form">MASUK SEKARANG</button>
+                </form>
+            </div>
+        </div>
     </div>
+
+    <script>
+        // Modal Register Logic
+        const registerModal = document.getElementById('registerModal');
+        const triggerRegisterBtns = document.querySelectorAll('.btn-trigger-daftar');
+        const closeRegisterBtn = document.querySelector('.close-register');
+
+        triggerRegisterBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                registerModal.style.display = 'flex';
+            });
+        });
+
+        closeRegisterBtn.addEventListener('click', () => {
+            registerModal.style.display = 'none';
+        });
+
+        // Modal Login Logic
+        const loginModal = document.getElementById('loginModal');
+        const triggerLoginBtns = document.querySelectorAll('.btn-trigger-masuk');
+        const closeLoginBtn = document.querySelector('.close-login');
+
+        triggerLoginBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                loginModal.style.display = 'flex';
+            });
+        });
+
+        closeLoginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside the content box
+        window.addEventListener('click', (e) => {
+            if (e.target === registerModal) {
+                registerModal.style.display = 'none';
+            }
+            if (e.target === loginModal) {
+                loginModal.style.display = 'none';
+            }
+        });
+    </script>
 
 </body>
 </html>
