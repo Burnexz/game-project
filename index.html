@@ -142,6 +142,33 @@
             color: #ffffff;
         }
 
+        /* User Panel (Tampil Saat Berhasil Login) */
+        .user-panel {
+            background: rgba(30, 144, 255, 0.1);
+            border: 1px solid #1e90ff;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 10px;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        .user-panel b {
+            color: #1e90ff;
+        }
+
+        .btn-logout {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
         /* Game Categories */
         .categories {
             display: grid;
@@ -344,9 +371,13 @@
                 </div>
                 <div style="font-size: 35px;">🐉</div>
             </div>
-            <div class="auth-buttons">
-                <button class="btn-masuk btn-trigger-masuk">➔ MASUK</button>
-                <button class="btn-daftar btn-trigger-daftar">+ DAFTAR</button>
+
+            <!-- Bagian Tombol Auth / Panel User (Berubah Dinamis) -->
+            <div id="authArea">
+                <div class="auth-buttons">
+                    <button class="btn-masuk btn-trigger-masuk">➔ MASUK</button>
+                    <button class="btn-daftar btn-trigger-daftar">+ DAFTAR</button>
+                </div>
             </div>
         </div>
 
@@ -389,39 +420,39 @@
             <div class="modal-content">
                 <span class="close-btn close-register">&times;</span>
                 <div class="modal-title">FORMULIR PENDAFTARAN</div>
-                <form>
+                <form id="formRegister">
                     <div class="form-group">
                         <label>Username</label>
-                        <input type="text" placeholder="Buat username unik" required>
+                        <input type="text" id="regUser" placeholder="Buat username unik" required>
                     </div>
                     <div class="form-group">
                         <label>Kata Sandi</label>
-                        <input type="password" placeholder="Minimal 6 karakter" required>
+                        <input type="password" id="regPass" placeholder="Minimal 6 karakter" required>
                     </div>
                     <div class="form-group">
                         <label>Nomor Telepon / WhatsApp</label>
-                        <input type="text" placeholder="Contoh: 08123456789" required>
+                        <input type="text" id="regPhone" placeholder="Contoh: 08123456789" required>
                     </div>
                     <div class="form-group">
                         <label>Bank / E-Wallet</label>
-                        <select required>
+                        <select id="regBank" required>
                             <option value="">Pilih Bank / E-Wallet</option>
-                            <option value="bca">BCA</option>
-                            <option value="mandiri">Mandiri</option>
-                            <option value="bni">BNI</option>
-                            <option value="bri">BRI</option>
-                            <option value="dana">DANA</option>
-                            <option value="ovo">OVO</option>
-                            <option value="gopay">GOPAY</option>
+                            <option value="BCA">BCA</option>
+                            <option value="Mandiri">Mandiri</option>
+                            <option value="BNI">BNI</option>
+                            <option value="BRI">BRI</option>
+                            <option value="DANA">DANA</option>
+                            <option value="OVO">OVO</option>
+                            <option value="GOPAY">GOPAY</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label>Nama Rekening</label>
-                        <input type="text" placeholder="Sesuai buku rekening" required>
+                        <input type="text" id="regAccName" placeholder="Sesuai buku rekening" required>
                     </div>
                     <div class="form-group">
                         <label>Nomor Rekening</label>
-                        <input type="text" placeholder="Nomor rekening valid" required>
+                        <input type="text" id="regAccNo" placeholder="Nomor rekening valid" required>
                     </div>
                     <button type="submit" class="btn-submit-form">DAFTAR SEKARANG</button>
                 </form>
@@ -433,14 +464,14 @@
             <div class="modal-content">
                 <span class="close-btn close-login">&times;</span>
                 <div class="modal-title">MASUK AKUN</div>
-                <form>
+                <form id="formLogin">
                     <div class="form-group">
                         <label>Username</label>
-                        <input type="text" placeholder="Masukkan username Anda" required>
+                        <input type="text" id="loginUser" placeholder="Masukkan username Anda" required>
                     </div>
                     <div class="form-group">
                         <label>Kata Sandi</label>
-                        <input type="password" placeholder="Masukkan kata sandi" required>
+                        <input type="password" id="loginPass" placeholder="Masukkan kata sandi" required>
                     </div>
                     <button type="submit" class="btn-submit-form">MASUK SEKARANG</button>
                 </form>
@@ -449,6 +480,11 @@
     </div>
 
     <script>
+        // Cek status login saat halaman dimuat
+        document.addEventListener("DOMContentLoaded", () => {
+            checkLoginState();
+        });
+
         // Modal Register Logic
         const registerModal = document.getElementById('registerModal');
         const triggerRegisterBtns = document.querySelectorAll('.btn-trigger-daftar');
@@ -490,6 +526,102 @@
                 loginModal.style.display = 'none';
             }
         });
+
+        // Handle Proses Pendaftaran (Simpan ke localStorage)
+        const formRegister = document.getElementById('formRegister');
+        formRegister.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const userData = {
+                username: document.getElementById('regUser').value,
+                pass: document.getElementById('regPass').value,
+                phone: document.getElementById('regPhone').value,
+                bank: document.getElementById('regBank').value,
+                accName: document.getElementById('regAccName').value,
+                accNo: document.getElementById('regAccNo').value
+            };
+
+            localStorage.setItem('burnexz_user', JSON.stringify(userData));
+            alert('Pendaftaran Berhasil! Silakan masuk menggunakan akun Anda.');
+            registerModal.style.display = 'none';
+            formRegister.reset();
+            loginModal.style.display = 'flex'; // Otomatis buka form login
+        });
+
+        // Handle Proses Login (Cek dari localStorage)
+        const formLogin = document.getElementById('formLogin');
+        formLogin.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const inputUser = document.getElementById('loginUser').value;
+            const inputPass = document.getElementById('loginPass').value;
+
+            const savedUserStr = localStorage.getItem('burnexz_user');
+            if (!savedUserStr) {
+                alert('Belum ada akun yang terdaftar! Silakan daftar terlebih dahulu.');
+                return;
+            }
+
+            const savedUser = JSON.parse(savedUserStr);
+
+            if (inputUser === savedUser.username && inputPass === savedUser.pass) {
+                localStorage.setItem('burnexz_logged', 'true');
+                alert('Login Berhasil! Selamat datang, ' + savedUser.username);
+                loginModal.style.display = 'none';
+                formLogin.reset();
+                checkLoginState();
+            } else {
+                alert('Username atau Kata Sandi salah!');
+            }
+        });
+
+        // Fungsi Mengubah Tampilan Berdasarkan Status Login
+        function checkLoginState() {
+            const isLogged = localStorage.getItem('burnexz_logged');
+            const savedUserStr = localStorage.getItem('burnexz_user');
+            const authArea = document.getElementById('authArea');
+
+            if (isLogged === 'true' && savedUserStr) {
+                const user = JSON.parse(savedUserStr);
+                authArea.innerHTML = `
+                    <div class="user-panel">
+                        <div>Halo, <b>${user.username}</b></div>
+                        <div>Saldo: <b>Rp 0</b> | Bank: ${user.bank}</div>
+                        <button class="btn-logout" onclick="logoutUser()">KELUAR (LOGOUT)</button>
+                    </div>
+                `;
+            } else {
+                authArea.innerHTML = `
+                    <div class="auth-buttons">
+                        <button class="btn-masuk btn-trigger-masuk">➔ MASUK</button>
+                        <button class="btn-daftar btn-trigger-daftar">+ DAFTAR</button>
+                    </div>
+                `;
+                // Re-bind events untuk tombol baru
+                rebindAuthEvents();
+            }
+        }
+
+        // Fungsi Logout
+        function logoutUser() {
+            localStorage.removeItem('burnexz_logged');
+            alert('Anda telah keluar.');
+            checkLoginState();
+        }
+
+        // Re-binding event setelah innerHTML diubah dinamis
+        function rebindAuthEvents() {
+            document.querySelectorAll('.btn-trigger-masuk').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loginModal.style.display = 'flex';
+                });
+            });
+            document.querySelectorAll('.btn-trigger-daftar').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    registerModal.style.display = 'flex';
+                });
+            });
+        }
     </script>
 
 </body>
