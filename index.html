@@ -4,344 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BURNEXZTOTO - Situs Resmi Terpercaya</title>
+    <!-- Swiper CSS CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background-color: #0b0f19;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .phone-container {
-            width: 100%;
-            max-width: 400px;
-            background-color: #121622;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            border: 2px solid #2a3447;
-            position: relative;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color: #0b0f19; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .phone-container { width: 100%; max-width: 400px; background-color: #121622; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5); border: 2px solid #2a3447; position: relative; }
+        
         /* Browser Address Bar */
-        .browser-bar {
-            background-color: #1a2233;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 12px;
-            color: #b0bec5;
-            border-bottom: 1px solid #2a3447;
-        }
-
-        .url-box {
-            background: #0b0f19;
-            padding: 5px 15px;
-            border-radius: 15px;
-            flex-grow: 1;
-            margin: 0 10px;
-            text-align: center;
-            color: #ffffff;
-        }
-
+        .browser-bar { background-color: #1a2233; padding: 10px 15px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #b0bec5; border-bottom: 1px solid #2a3447; }
+        .url-box { background: #0b0f19; padding: 5px 15px; border-radius: 15px; flex-grow: 1; margin: 0 10px; text-align: center; color: #ffffff; }
+        
         /* Header / Navbar Atas */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px;
-            background-color: #121622;
-            border-bottom: 1px solid #2a3447;
-        }
-
-        .logo {
-            font-size: 18px;
-            font-weight: bold;
-            color: #ffffff;
-            letter-spacing: 1px;
-        }
-
-        .logo span {
-            color: #1e90ff;
-        }
-
-        .btn-bergabung {
-            background-color: #1e90ff;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* Banner Section */
-        .banner {
-            position: relative;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            padding: 15px;
-            text-align: center;
-            border-bottom: 2px solid #1e90ff;
-        }
-
-        .banner-text {
-            font-size: 13px;
-            margin-bottom: 10px;
-            color: #e0e0e0;
-        }
-
-        .banner-content {
-            background: rgba(0, 0, 0, 0.4);
-            border-radius: 8px;
-            padding: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background-color: #121622; border-bottom: 1px solid #2a3447; }
+        .logo { font-size: 18px; font-weight: bold; color: #ffffff; letter-spacing: 1px; }
+        .logo span { color: #1e90ff; }
+        .btn-bergabung { background-color: #1e90ff; color: white; border: none; padding: 6px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        
+        /* Banner Section & Swiper Adjustment */
+        .banner-section { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); padding: 15px; border-bottom: 2px solid #1e90ff; }
+        .banner-text { font-size: 13px; margin-bottom: 10px; color: #e0e0e0; text-align: center; }
+        .banner-content { background: rgba(0, 0, 0, 0.4); border-radius: 8px; padding: 12px; display: flex; justify-content: space-between; align-items: center; min-height: 80px; }
+        .swiper-pagination-bullet { background: #b0bec5; opacity: 0.5; }
+        .swiper-pagination-bullet-active { background: #1e90ff; opacity: 1; }
+        .swiper { padding-bottom: 25px; }
 
         /* Auth Buttons */
-        .auth-buttons {
-            display: flex;
-            margin-top: 10px;
-            gap: 5px;
-        }
-
-        .btn-masuk, .btn-daftar {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            font-weight: bold;
-            font-size: 14px;
-            border-radius: 4px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-
-        .btn-masuk {
-            background-color: #1b263b;
-            color: #ffffff;
-            border: 1px solid #1e90ff;
-        }
-
-        .btn-daftar {
-            background-color: #1e90ff;
-            color: #ffffff;
-        }
-
-        /* User Panel (Tampil Saat Berhasil Login) */
-        .user-panel {
-            background: rgba(30, 144, 255, 0.1);
-            border: 1px solid #1e90ff;
-            border-radius: 6px;
-            padding: 10px;
-            margin-top: 10px;
-            text-align: left;
-            font-size: 12px;
-        }
-
-        .user-panel b {
-            color: #1e90ff;
-        }
-
-        .btn-logout {
-            background-color: #ff4d4d;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 11px;
-            margin-top: 8px;
-            font-weight: bold;
-        }
-
+        .auth-buttons { display: flex; margin-top: 10px; gap: 5px; }
+        .btn-masuk, .btn-daftar { flex: 1; padding: 10px; border: none; font-weight: bold; font-size: 14px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-masuk { background-color: #1b263b; color: #ffffff; border: 1px solid #1e90ff; }
+        .btn-daftar { background-color: #1e90ff; color: #ffffff; }
+        
+        /* User Panel */
+        .user-panel { background: rgba(30, 144, 255, 0.1); border: 1px solid #1e90ff; border-radius: 6px; padding: 10px; margin-top: 10px; text-align: left; font-size: 12px; }
+        .user-panel b { color: #1e90ff; }
+        .btn-logout { background-color: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; margin-top: 8px; font-weight: bold; }
+        
         /* Game Categories */
-        .categories {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 8px;
-            padding: 15px 10px;
-            background-color: #0b0f19;
-            text-align: center;
-        }
-
-        .category-item {
-            background-color: #161f30;
-            padding: 10px 5px;
-            border-radius: 8px;
-            font-size: 10px;
-            color: #b0bec5;
-            cursor: pointer;
-            border: 1px solid #222e45;
-        }
-
-        .category-item span {
-            display: block;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
+        .categories { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; padding: 15px 10px; background-color: #0b0f19; text-align: center; }
+        .category-item { background-color: #161f30; padding: 10px 5px; border-radius: 8px; font-size: 10px; color: #b0bec5; cursor: pointer; border: 1px solid #222e45; }
+        .category-item span { display: block; font-size: 16px; margin-bottom: 4px; }
+        
         /* Jackpot Section */
-        .jackpot-section {
-            background-color: #121622;
-            margin: 10px;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid #2a3447;
-        }
-
-        .jackpot-title {
-            color: #1e90ff;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 10px;
-            letter-spacing: 1px;
-        }
-
-        .jackpot-display {
-            background-color: #0b0f19;
-            border: 2px solid #1e90ff;
-            padding: 12px;
-            border-radius: 8px;
-            font-size: 22px;
-            font-weight: bold;
-            color: #ffffff;
-            letter-spacing: 2px;
-        }
-
+        .jackpot-section { background-color: #121622; margin: 10px; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #2a3447; }
+        .jackpot-title { color: #1e90ff; font-size: 14px; font-weight: bold; margin-bottom: 10px; letter-spacing: 1px; }
+        .jackpot-display { background-color: #0b0f19; border: 2px solid #1e90ff; padding: 12px; border-radius: 8px; font-size: 22px; font-weight: bold; color: #ffffff; letter-spacing: 2px; }
+        
         /* Bottom Navigation */
-        .bottom-nav {
-            display: flex;
-            justify-content: space-around;
-            background-color: #121622;
-            padding: 10px 0;
-            border-top: 1px solid #2a3447;
-            position: sticky;
-            bottom: 0;
-        }
-
-        .nav-item {
-            text-align: center;
-            color: #8a9ba8;
-            font-size: 10px;
-            cursor: pointer;
-            text-decoration: none;
-            background: none;
-            border: none;
-        }
-
-        .nav-item.active {
-            color: #1e90ff;
-        }
-
-        .nav-item span {
-            display: block;
-            font-size: 18px;
-            margin-bottom: 2px;
-        }
-
-        /* Modal Umum (Login & Register) */
-        .modal {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.85);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .modal-content {
-            background-color: #121622;
-            width: 100%;
-            max-width: 350px;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #1e90ff;
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            font-size: 20px;
-            color: #b0bec5;
-            cursor: pointer;
-        }
-
-        .close-btn:hover {
-            color: #ffffff;
-        }
-
-        .modal-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #1e90ff;
-            margin-bottom: 15px;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            color: #b0bec5;
-            margin-bottom: 4px;
-        }
-
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 9px 12px;
-            background-color: #0b0f19;
-            border: 1px solid #2a3447;
-            border-radius: 6px;
-            color: #ffffff;
-            font-size: 12px;
-        }
-
-        .form-group input:focus, .form-group select:focus {
-            outline: none;
-            border-color: #1e90ff;
-        }
-
-        .btn-submit-form {
-            width: 100%;
-            padding: 10px;
-            background-color: #1e90ff;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 13px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+        .bottom-nav { display: flex; justify-content: space-around; background-color: #121622; padding: 10px 0; border-top: 1px solid #2a3447; position: sticky; bottom: 0; z-index: 10; }
+        .nav-item { text-align: center; color: #8a9ba8; font-size: 10px; cursor: pointer; text-decoration: none; background: none; border: none; }
+        .nav-item.active { color: #1e90ff; }
+        .nav-item span { display: block; font-size: 18px; margin-bottom: 2px; }
+        
+        /* Modal Umum */
+        .modal { display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background-color: #121622; width: 100%; max-width: 350px; padding: 20px; border-radius: 12px; border: 1px solid #1e90ff; position: relative; max-height: 90vh; overflow-y: auto; }
+        .close-btn { position: absolute; top: 15px; right: 15px; font-size: 20px; color: #b0bec5; cursor: pointer; }
+        .close-btn:hover { color: #ffffff; }
+        .modal-title { font-size: 16px; font-weight: bold; color: #1e90ff; margin-bottom: 15px; text-align: center; letter-spacing: 1px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 11px; color: #b0bec5; margin-bottom: 4px; }
+        .form-group input, .form-group select { width: 100%; padding: 9px 12px; background-color: #0b0f19; border: 1px solid #2a3447; border-radius: 6px; color: #ffffff; font-size: 12px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #1e90ff; }
+        .btn-submit-form { width: 100%; padding: 10px; background-color: #1e90ff; color: white; border: none; border-radius: 6px; font-weight: bold; font-size: 13px; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
 <body>
@@ -360,19 +85,41 @@
             <button class="btn-bergabung btn-trigger-daftar">BERGABUNG</button>
         </div>
 
-        <!-- Banner & Auth -->
-        <div class="banner">
+        <!-- Banner & Swiper Slider Section -->
+        <div class="banner-section">
             <div class="banner-text">Selamat datang di website resmi BURNEXZTOTO</div>
-            <div class="banner-content">
-                <div style="text-align: left; font-size: 11px; color: #ccc;">
-                    MELAYANI DEPOSIT VIA<br>
-                    <b>PULSA, E-WALLET, BANK</b><br>
-                    <span style="font-size: 16px; color: #1e90ff; font-weight: bold;">MIN. DEPOSIT 10.000</span>
+            
+            <!-- Swiper Container -->
+            <div class="swiper mySwiper">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1 -->
+                    <div class="swiper-slide">
+                        <div class="banner-content">
+                            <div style="text-align: left; font-size: 11px; color: #ccc;">
+                                MELAYANI DEPOSIT VIA<br>
+                                <b>PULSA, E-WALLET, BANK</b><br>
+                                <span style="font-size: 14px; color: #1e90ff; font-weight: bold;">MIN. DEPOSIT 10.000</span>
+                            </div>
+                            <div style="font-size: 32px;">🐉</div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="swiper-slide">
+                        <div class="banner-content">
+                            <div style="text-align: left; font-size: 11px; color: #ccc;">
+                                BONUS NEW MEMBER 100%<br>
+                                <b>KLAIM SEKARANG</b><br>
+                                <span style="font-size: 14px; color: #1e90ff; font-weight: bold;">PROMO TERBESAR</span>
+                            </div>
+                            <div style="font-size: 32px;">🎁</div>
+                        </div>
+                    </div>
                 </div>
-                <div style="font-size: 35px;">🐉</div>
+                <!-- Pagination -->
+                <div class="swiper-pagination"></div>
             </div>
 
-            <!-- Bagian Tombol Auth / Panel User (Berubah Dinamis) -->
+            <!-- Bagian Tombol Auth / Panel User -->
             <div id="authArea">
                 <div class="auth-buttons">
                     <button class="btn-masuk btn-trigger-masuk">➔ MASUK</button>
@@ -398,21 +145,11 @@
 
         <!-- Bottom Navigation -->
         <div class="bottom-nav">
-            <a href="#" class="nav-item active">
-                <span>🏠</span>Beranda
-            </a>
-            <button class="nav-item btn-trigger-daftar" style="background:none; border:none; cursor:pointer;">
-                <span>➕</span>Daftar
-            </button>
-            <button class="nav-item btn-trigger-masuk" style="background:none; border:none; cursor:pointer;">
-                <span>👤</span>Masuk
-            </button>
-            <a href="#" class="nav-item">
-                <span>🏷️</span>Promo
-            </a>
-            <a href="#" class="nav-item">
-                <span>🎧</span>Live Chat
-            </a>
+            <a href="#" class="nav-item active"><span>🏠</span>Beranda</a>
+            <button class="nav-item btn-trigger-daftar" style="background:none; border:none; cursor:pointer;"><span>➕</span>Daftar</button>
+            <button class="nav-item btn-trigger-masuk" style="background:none; border:none; cursor:pointer;"><span>👤</span>Masuk</button>
+            <a href="#" class="nav-item"><span>🏷️</span>Promo</a>
+            <a href="#" class="nav-item"><span>🎧</span>Live Chat</a>
         </div>
 
         <!-- Modal Pendaftaran -->
@@ -479,55 +216,57 @@
         </div>
     </div>
 
+    <!-- Swiper JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
+        // Inisialisasi Swiper Slider
+        const swiper = new Swiper(".mySwiper", {
+            loop: true,
+            autoplay: {
+                delay: 3500,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+        });
+
         // Cek status login saat halaman dimuat
         document.addEventListener("DOMContentLoaded", () => {
             checkLoginState();
         });
 
-        // Modal Register Logic
         const registerModal = document.getElementById('registerModal');
-        const triggerRegisterBtns = document.querySelectorAll('.btn-trigger-daftar');
-        const closeRegisterBtn = document.querySelector('.close-register');
+        const loginModal = document.getElementById('loginModal');
 
-        triggerRegisterBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
+        // Event Delegation untuk tombol modal (Aman dari bug innerHTML dinamis)
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.btn-trigger-daftar')) {
                 e.preventDefault();
                 registerModal.style.display = 'flex';
-            });
-        });
-
-        closeRegisterBtn.addEventListener('click', () => {
-            registerModal.style.display = 'none';
-        });
-
-        // Modal Login Logic
-        const loginModal = document.getElementById('loginModal');
-        const triggerLoginBtns = document.querySelectorAll('.btn-trigger-masuk');
-        const closeLoginBtn = document.querySelector('.close-login');
-
-        triggerLoginBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            }
+            if (e.target.closest('.btn-trigger-masuk')) {
                 e.preventDefault();
                 loginModal.style.display = 'flex';
-            });
+            }
         });
 
-        closeLoginBtn.addEventListener('click', () => {
+        // Tombol Close Modal
+        document.querySelector('.close-register').addEventListener('click', () => {
+            registerModal.style.display = 'none';
+        });
+        document.querySelector('.close-login').addEventListener('click', () => {
             loginModal.style.display = 'none';
         });
 
-        // Close modal when clicking outside the content box
+        // Tutup modal ketika klik di luar kotak konten
         window.addEventListener('click', (e) => {
-            if (e.target === registerModal) {
-                registerModal.style.display = 'none';
-            }
-            if (e.target === loginModal) {
-                loginModal.style.display = 'none';
-            }
+            if (e.target === registerModal) registerModal.style.display = 'none';
+            if (e.target === loginModal) loginModal.style.display = 'none';
         });
 
-        // Handle Proses Pendaftaran (Simpan ke localStorage)
+        // Handle Proses Pendaftaran
         const formRegister = document.getElementById('formRegister');
         formRegister.addEventListener('submit', (e) => {
             e.preventDefault();
@@ -539,29 +278,27 @@
                 accName: document.getElementById('regAccName').value,
                 accNo: document.getElementById('regAccNo').value
             };
-
             localStorage.setItem('burnexz_user', JSON.stringify(userData));
             alert('Pendaftaran Berhasil! Silakan masuk menggunakan akun Anda.');
             registerModal.style.display = 'none';
             formRegister.reset();
-            loginModal.style.display = 'flex'; // Otomatis buka form login
+            loginModal.style.display = 'flex';
         });
 
-        // Handle Proses Login (Cek dari localStorage)
+        // Handle Proses Login
         const formLogin = document.getElementById('formLogin');
         formLogin.addEventListener('submit', (e) => {
             e.preventDefault();
             const inputUser = document.getElementById('loginUser').value;
             const inputPass = document.getElementById('loginPass').value;
-
             const savedUserStr = localStorage.getItem('burnexz_user');
+            
             if (!savedUserStr) {
                 alert('Belum ada akun yang terdaftar! Silakan daftar terlebih dahulu.');
                 return;
             }
-
+            
             const savedUser = JSON.parse(savedUserStr);
-
             if (inputUser === savedUser.username && inputPass === savedUser.pass) {
                 localStorage.setItem('burnexz_logged', 'true');
                 alert('Login Berhasil! Selamat datang, ' + savedUser.username);
@@ -578,7 +315,7 @@
             const isLogged = localStorage.getItem('burnexz_logged');
             const savedUserStr = localStorage.getItem('burnexz_user');
             const authArea = document.getElementById('authArea');
-
+            
             if (isLogged === 'true' && savedUserStr) {
                 const user = JSON.parse(savedUserStr);
                 authArea.innerHTML = `
@@ -595,8 +332,6 @@
                         <button class="btn-daftar btn-trigger-daftar">+ DAFTAR</button>
                     </div>
                 `;
-                // Re-bind events untuk tombol baru
-                rebindAuthEvents();
             }
         }
 
@@ -606,23 +341,6 @@
             alert('Anda telah keluar.');
             checkLoginState();
         }
-
-        // Re-binding event setelah innerHTML diubah dinamis
-        function rebindAuthEvents() {
-            document.querySelectorAll('.btn-trigger-masuk').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    loginModal.style.display = 'flex';
-                });
-            });
-            document.querySelectorAll('.btn-trigger-daftar').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    registerModal.style.display = 'flex';
-                });
-            });
-        }
     </script>
-
 </body>
 </html>
