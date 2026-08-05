@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BurNexztoto Login</title>
     <style>
-        /* Mengatur background luar agar mirip meja/latar foto */
         body {
-            background-color: #2b2b2b;
+            background-color: #1a1a1a;
             color: #fff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -17,41 +16,54 @@
             min-height: 100vh;
         }
 
-        /* KERANGKA HP (Membuat batasan layar seperti gambar nomor 2) */
         .phone-container {
             width: 340px;
             background-color: #000;
-            border-radius: 25px;
+            border-radius: 20px;
             padding: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.8);
             display: flex;
             flex-direction: column;
-            border: 4px solid #444;
+            border: 3px solid #333;
             box-sizing: border-box;
             overflow: hidden;
         }
 
-        /* KOTAK BIRU TUA DI BAGIAN ATAS (Header) */
+        /* HEADER BIRU TUA DENGAN EFEK GRADASI */
         .header-box {
-            background-color: #071936;
+            background: linear-gradient(135deg, #051630 0%, #0a2540 100%);
             margin: -15px -15px 15px -15px;
-            padding: 20px 15px;
+            padding: 18px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #0b2545;
+            border-bottom: 2px solid #0f3057;
         }
 
         .logo {
-            font-size: 1.5em;
+            font-size: 1.4em;
             font-weight: bold;
             color: #fff;
             font-style: italic;
-            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        /* IKON DADU DI TENGAH LOGO */
+        .logo-dice {
+            background-color: #1d4ed8;
+            color: #fff;
+            font-size: 0.7em;
+            padding: 2px 5px;
+            border-radius: 4px;
+            font-style: normal;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .live-chat-btn {
-            background-color: #1d4ed8;
+            background-color: #1a4a7b;
             color: #fff;
             padding: 6px 12px;
             border-radius: 6px;
@@ -59,17 +71,18 @@
             font-size: 0.8em;
             cursor: pointer;
             font-weight: 500;
+            border: 1px solid #28629f;
         }
 
         .live-chat-btn:hover {
-            background-color: #2563eb;
+            background-color: #133a61;
         }
 
         .welcome-text {
             text-align: center;
             color: #fff;
             font-size: 0.85em;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
         }
 
         .form-container {
@@ -99,7 +112,7 @@
             display: flex;
             justify-content: space-between;
             font-size: 0.8em;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             padding: 0 5px;
         }
 
@@ -116,16 +129,16 @@
         .login-title {
             text-align: center;
             font-weight: bold;
-            margin-bottom: 15px;
-            font-size: 1em;
+            margin-bottom: 12px;
+            font-size: 0.95em;
             letter-spacing: 1px;
         }
 
         .action-btn {
             background-color: #000;
-            border: 2px solid #1d4ed8;
+            border: 2px solid #1a4a7b;
             color: #fff;
-            padding: 10px 20px;
+            padding: 10px 18px;
             border-radius: 25px;
             font-weight: bold;
             font-size: 0.9em;
@@ -138,11 +151,11 @@
         }
 
         .action-btn:hover {
-            background-color: #0b2545;
+            background-color: #1a4a7b;
         }
         
         .action-btn .play-icon {
-            background-color: #1d4ed8;
+            background-color: #1a4a7b;
             border-radius: 50%;
             width: 22px;
             height: 22px;
@@ -156,57 +169,75 @@
         .last-result {
             font-weight: bold;
             font-size: 0.95em;
-            margin-top: 10px;
-            margin-bottom: 15px;
+            margin-top: 8px;
+            margin-bottom: 12px;
         }
 
-        /* GRID LOGO BANK */
+        /* GRID LOGO BANK MENGGUNAKAN GAMBAR */
         .logos-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 6px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .logos-grid .logo-item:last-child {
-            grid-column: 2; /* Membuat logo GoPay berada di tengah pada baris terakhir */
+            grid-column: 2; /* Posisi Gopay di tengah baris terakhir */
         }
 
         .logo-item {
             background-color: #fff;
             border-radius: 6px;
-            padding: 6px;
+            padding: 4px;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 26px;
-            color: #000;
-            font-weight: bold;
-            font-size: 0.7em;
+            height: 28px;
         }
 
-        .logo-item .dot {
-            width: 6px;
-            height: 6px;
-            background-color: #22c55e;
-            border-radius: 50%;
-            margin-right: 5px;
+        /* Mengatur ukuran gambar logo bank */
+        .logo-item img {
+            max-height: 20px;
+            max-width: 100%;
+            object-fit: contain;
         }
 
         .footer {
             text-align: center;
             color: #888;
             font-size: 0.65em;
-            margin-top: auto;
-            padding-bottom: 5px;
+            margin-top: 5px;
+            margin-bottom: 8px;
+        }
+
+        /* TITIK NAVIGASI / SLIDER DOTS DI BAWAH */
+        .pagination-dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 5px;
+        }
+
+        .pagination-dots span {
+            width: 7px;
+            height: 7px;
+            background-color: #555;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .pagination-dots span.active {
+            background-color: #fff;
         }
     </style>
 </head>
 <body>
     <div class="phone-container">
-        <!-- Kotak Header Biru Tua -->
+        <!-- Header dengan Ikan/Logo Dadu -->
         <div class="header-box">
-            <div class="logo">BurNexztoto</div>
+            <div class="logo">
+                BurNex<span class="logo-dice">🎲</span>to
+            </div>
             <a href="javascript:void(0);" class="live-chat-btn">Live Chat</a>
         </div>
         
@@ -239,18 +270,26 @@
         
         <div class="last-result">Hasil Terakhir</div>
         
+        <!-- Bagian Logo Bank (Ganti link src dengan URL gambar logo bank Anda) -->
         <div class="logos-grid">
-            <div class="logo-item"><div class="dot"></div> BCA</div>
-            <div class="logo-item"><div class="dot"></div> BRI</div>
-            <div class="logo-item"><div class="dot"></div> MANDIRI</div>
-            <div class="logo-item"><div class="dot"></div> SEABANK</div>
-            <div class="logo-item"><div class="dot"></div> DANA</div>
-            <div class="logo-item"><div class="dot"></div> OVO</div>
-            <div class="logo-item"><div class="dot"></div> GOPAY</div>
+            <div class="logo-item"><img src="URL_LOGO_BCA" alt="BCA"></div>
+            <div class="logo-item"><img src="URL_LOGO_BRI" alt="BRI"></div>
+            <div class="logo-item"><img src="URL_LOGO_MANDIRI" alt="Mandiri"></div>
+            <div class="logo-item"><img src="URL_LOGO_SEABANK" alt="SeaBank"></div>
+            <div class="logo-item"><img src="URL_LOGO_DANA" alt="Dana"></div>
+            <div class="logo-item"><img src="URL_LOGO_OVO" alt="OVO"></div>
+            <div class="logo-item"><img src="URL_LOGO_GOPAY" alt="Gopay"></div>
         </div>
         
         <div class="footer">
             © Copyright 2014 - 2026. All Rights Reserved.
+        </div>
+
+        <!-- Titik Navigasi Bawah -->
+        <div class="pagination-dots">
+            <span class="active"></span>
+            <span></span>
+            <span></span>
         </div>
     </div>
 </body>
