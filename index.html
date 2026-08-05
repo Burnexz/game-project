@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BurNexztoto Login</title>
     <style>
+        /* LATAR BELUANG LUAR: HITAM PEKAT */
         body {
-            background-color: #1a1a1a;
-            color: #fff;
+            background-color: #0b0b0b;
+            color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             display: flex;
@@ -16,73 +17,72 @@
             min-height: 100vh;
         }
 
+        /* KONTAINER UTAMA HP: HITAM DENGAN BORDER PUTIH TIPIS */
         .phone-container {
             width: 340px;
-            background-color: #000;
+            background-color: #000000;
             border-radius: 20px;
             padding: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
             display: flex;
             flex-direction: column;
-            border: 3px solid #333;
+            border: 2px solid #ffffff;
             box-sizing: border-box;
             overflow: hidden;
         }
 
-        /* HEADER BIRU TUA DENGAN EFEK GRADASI */
+        /* HEADER: KOMBINASI BIRU ELEKTRIK DAN HITAM */
         .header-box {
-            background: linear-gradient(135deg, #051630 0%, #0a2540 100%);
+            background: linear-gradient(135deg, #0044cc 0%, #001a66 100%);
             margin: -15px -15px 15px -15px;
             padding: 18px 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #0f3057;
+            border-bottom: 2px solid #ffffff;
         }
 
         .logo {
             font-size: 1.4em;
             font-weight: bold;
-            color: #fff;
+            color: #ffffff;
             font-style: italic;
             display: flex;
             align-items: center;
-            gap: 2px;
+            gap: 4px;
         }
 
-        /* IKON DADU DI TENGAH LOGO */
+        /* IKON DADU: BIRU DAN PUTIH */
         .logo-dice {
-            background-color: #1d4ed8;
-            color: #fff;
-            font-size: 0.7em;
-            padding: 2px 5px;
-            border-radius: 4px;
-            font-style: normal;
-            display: inline-block;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            display: inline-flex;
+            align-items: center;
+            vertical-align: middle;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
 
+        /* TOMBOL LIVE CHAT: BIRU CERAH & TEKS PUTIH */
         .live-chat-btn {
-            background-color: #1a4a7b;
-            color: #fff;
+            background-color: #0055ff;
+            color: #ffffff;
             padding: 6px 12px;
             border-radius: 6px;
             text-decoration: none;
             font-size: 0.8em;
             cursor: pointer;
-            font-weight: 500;
-            border: 1px solid #28629f;
+            font-weight: 600;
+            border: 1px solid #ffffff;
         }
 
         .live-chat-btn:hover {
-            background-color: #133a61;
+            background-color: #0033bb;
         }
 
         .welcome-text {
             text-align: center;
-            color: #fff;
+            color: #ffffff;
             font-size: 0.85em;
             margin-bottom: 18px;
+            font-weight: 400;
         }
 
         .form-container {
@@ -92,10 +92,12 @@
             margin-bottom: 10px;
         }
 
+        /* KOTAK INPUT: PUTIH BERSIH DENGAN TEKS HITAM */
         .input-group {
-            background-color: #fff;
+            background-color: #ffffff;
             border-radius: 25px;
             padding: 12px 15px;
+            border: 1px solid #ffffff;
         }
 
         .input-group input {
@@ -103,9 +105,14 @@
             border: none;
             width: 100%;
             outline: none;
-            color: #000;
+            color: #000000;
             text-align: center;
             font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        .input-group input::placeholder {
+            color: #666666;
         }
 
         .form-links {
@@ -117,13 +124,13 @@
         }
 
         .form-links a {
-            color: #ccc;
+            color: #cccccc;
             text-decoration: underline;
             cursor: pointer;
         }
 
         .form-links a:hover {
-            color: #fff;
+            color: #ffffff;
         }
 
         .login-title {
@@ -132,12 +139,14 @@
             margin-bottom: 12px;
             font-size: 0.95em;
             letter-spacing: 1px;
+            color: #ffffff;
         }
 
+        /* TOMBOL AKSI (DAFTAR & PROMOSI): HITAM DENGAN BORDER BIRU MENYALA */
         .action-btn {
-            background-color: #000;
-            border: 2px solid #1a4a7b;
-            color: #fff;
+            background-color: #000000;
+            border: 2px solid #0055ff;
+            color: #ffffff;
             padding: 10px 18px;
             border-radius: 25px;
             font-weight: bold;
@@ -148,14 +157,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: background-color 0.3s;
         }
 
         .action-btn:hover {
-            background-color: #1a4a7b;
+            background-color: #002266;
         }
         
         .action-btn .play-icon {
-            background-color: #1a4a7b;
+            background-color: #0055ff;
             border-radius: 50%;
             width: 22px;
             height: 22px;
@@ -163,7 +173,7 @@
             justify-content: center;
             align-items: center;
             font-size: 0.6em;
-            color: #fff;
+            color: #ffffff;
         }
 
         .last-result {
@@ -171,9 +181,10 @@
             font-size: 0.95em;
             margin-top: 8px;
             margin-bottom: 12px;
+            color: #ffffff;
         }
 
-        /* GRID LOGO BANK MENGGUNAKAN GAMBAR */
+        /* GRID LOGO BANK: LATAR PUTIH BERSIH */
         .logos-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -182,35 +193,38 @@
         }
 
         .logos-grid .logo-item:last-child {
-            grid-column: 2; /* Posisi Gopay di tengah baris terakhir */
+            grid-column: 2;
         }
 
         .logo-item {
-            background-color: #fff;
+            background-color: #ffffff;
             border-radius: 6px;
             padding: 4px;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 28px;
+            font-weight: 800;
+            font-size: 0.85em;
+            letter-spacing: -0.5px;
         }
 
-        /* Mengatur ukuran gambar logo bank */
-        .logo-item img {
-            max-height: 20px;
-            max-width: 100%;
-            object-fit: contain;
-        }
+        .txt-bca { color: #003b70; font-style: italic; }
+        .txt-bri { color: #00529c; }
+        .txt-mandiri { color: #003366; }
+        .txt-seabank { color: #ea580c; font-size: 0.75em; }
+        .txt-dana { color: #108ee9; }
+        .txt-ovo { color: #4c2882; }
+        .txt-gopay { color: #00816a; }
 
         .footer {
             text-align: center;
-            color: #888;
+            color: #888888;
             font-size: 0.65em;
             margin-top: 5px;
             margin-bottom: 8px;
         }
 
-        /* TITIK NAVIGASI / SLIDER DOTS DI BAWAH */
         .pagination-dots {
             display: flex;
             justify-content: center;
@@ -221,22 +235,32 @@
         .pagination-dots span {
             width: 7px;
             height: 7px;
-            background-color: #555;
+            background-color: #444444;
             border-radius: 50%;
             display: inline-block;
         }
 
         .pagination-dots span.active {
-            background-color: #fff;
+            background-color: #ffffff;
         }
     </style>
 </head>
 <body>
     <div class="phone-container">
-        <!-- Header dengan Ikan/Logo Dadu -->
         <div class="header-box">
             <div class="logo">
-                BurNex<span class="logo-dice">🎲</span>to
+                BurNex
+                <span class="logo-dice">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="24" height="24" rx="5" fill="#0055ff"/>
+                        <circle cx="7" cy="7" r="2" fill="white"/>
+                        <circle cx="17" cy="7" r="2" fill="white"/>
+                        <circle cx="12" cy="12" r="2" fill="white"/>
+                        <circle cx="7" cy="17" r="2" fill="white"/>
+                        <circle cx="17" cy="17" r="2" fill="white"/>
+                    </svg>
+                </span>
+                to
             </div>
             <a href="javascript:void(0);" class="live-chat-btn">Live Chat</a>
         </div>
@@ -270,22 +294,20 @@
         
         <div class="last-result">Hasil Terakhir</div>
         
-        <!-- Bagian Logo Bank (Ganti link src dengan URL gambar logo bank Anda) -->
         <div class="logos-grid">
-            <div class="logo-item"><img src="URL_LOGO_BCA" alt="BCA"></div>
-            <div class="logo-item"><img src="URL_LOGO_BRI" alt="BRI"></div>
-            <div class="logo-item"><img src="URL_LOGO_MANDIRI" alt="Mandiri"></div>
-            <div class="logo-item"><img src="URL_LOGO_SEABANK" alt="SeaBank"></div>
-            <div class="logo-item"><img src="URL_LOGO_DANA" alt="Dana"></div>
-            <div class="logo-item"><img src="URL_LOGO_OVO" alt="OVO"></div>
-            <div class="logo-item"><img src="URL_LOGO_GOPAY" alt="Gopay"></div>
+            <div class="logo-item"><span class="txt-bca">BCA</span></div>
+            <div class="logo-item"><span class="txt-bri">BRI</span></div>
+            <div class="logo-item"><span class="txt-mandiri">mandiri</span></div>
+            <div class="logo-item"><span class="txt-seabank">SeaBank</span></div>
+            <div class="logo-item"><span class="txt-dana">DANA</span></div>
+            <div class="logo-item"><span class="txt-ovo">OVO</span></div>
+            <div class="logo-item"><span class="txt-gopay">gopay</span></div>
         </div>
         
         <div class="footer">
             © Copyright 2014 - 2026. All Rights Reserved.
         </div>
 
-        <!-- Titik Navigasi Bawah -->
         <div class="pagination-dots">
             <span class="active"></span>
             <span></span>
