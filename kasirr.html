@@ -254,6 +254,358 @@
 
     setInterval(drawMatrix, 33);
   </script>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cyber Login</title>
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: #030605;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Container utama HUD dengan sudut terpotong (Chamfered) */
+    .hud-container {
+      position: relative;
+      display: flex;
+      width: 100%;
+      max-width: 950px;
+      background-color: rgba(10, 15, 12, 0.95);
+      border: 1px solid #10b981;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+      clip-path: polygon(
+        30px 0, 100% 0, 100% calc(100% - 30px), 
+        calc(100% - 30px) 100%, 0 100%, 0 30px
+      );
+    }
+
+    /* Node titik hijau berpijar pada sudut HUD */
+    .hud-dot {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background-color: #00ff66;
+      box-shadow: 0 0 8px #00ff66;
+      border-radius: 50%;
+      z-index: 10;
+    }
+    .dot-tl { top: 12px; left: 12px; }
+    .dot-tr { top: 12px; right: 12px; }
+    .dot-bl { bottom: 12px; left: 12px; }
+    .dot-br { bottom: 12px; right: 12px; }
+    .dot-mid-left { top: 50%; left: 0; transform: translateY(-50%); }
+    .dot-mid-right { top: 50%; right: 0; transform: translateY(-50%); }
+
+    /* Bagian Visual Kiri (Gambar Hacker) */
+    .visual-side {
+      flex: 1;
+      position: relative;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      min-height: 480px;
+    }
+
+    .visual-side img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: contrast(1.1) brightness(0.9);
+    }
+
+    /* Overlay gradasi hijau pada gambar */
+    .visual-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(0, 255, 102, 0.2) 0%, rgba(3, 6, 5, 0.8) 80%);
+    }
+
+    /* Bagian Form Kanan */
+    .form-side {
+      flex: 1.1;
+      padding: 45px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-left: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .form-side h2 {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 26px;
+      color: #ffffff;
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 24px;
+    }
+
+    /* Tombol Google */
+    .btn-google {
+      width: 100%;
+      padding: 10px;
+      background-color: #121816;
+      border: 1px solid #26332e;
+      border-radius: 6px;
+      color: #d1d5db;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-google:hover {
+      background-color: #1a2320;
+      border-color: #10b981;
+    }
+
+    /* Pemisah / Divider */
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 20px 0;
+      color: #4b5563;
+      font-size: 11px;
+      text-transform: lowercase;
+    }
+
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #1f2923;
+    }
+
+    .divider span {
+      padding: 0 10px;
+    }
+
+    /* Form & Input Fields */
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    label {
+      font-size: 12px;
+      color: #9ca3af;
+      display: block;
+    }
+
+    .forgot-link {
+      font-size: 12px;
+      color: #4b5563;
+      text-decoration: none;
+    }
+
+    .forgot-link:hover {
+      color: #10b981;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input[type="email"],
+    input[type="password"],
+    input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      background-color: #0d1310;
+      border: 1px solid #1e2923;
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #00ff66;
+      box-shadow: 0 0 5px rgba(0, 255, 102, 0.3);
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #4b5563;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .toggle-password:hover {
+      color: #10b981;
+    }
+
+    /* Tombol Utama Login */
+    .btn-submit {
+      width: 100%;
+      padding: 11px;
+      background-color: #00ff66;
+      border: none;
+      border-radius: 6px;
+      color: #030605;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-submit:hover {
+      background-color: #10b981;
+      box-shadow: 0 0 18px rgba(16, 185, 129, 0.6);
+    }
+
+    /* Footer Text */
+    .signup-text {
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+      margin-top: 20px;
+    }
+
+    .signup-text a {
+      color: #9ca3af;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .signup-text a:hover {
+      color: #00ff66;
+    }
+
+    /* Responsive untuk tampilan Mobile */
+    @media (max-width: 768px) {
+      .hud-container {
+        flex-direction: column;
+        clip-path: none;
+      }
+      .visual-side {
+        min-height: 200px;
+      }
+      .form-side {
+        padding: 30px 20px;
+        border-left: none;
+        border-top: 1px solid rgba(16, 185, 129, 0.3);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hud-container">
+    <!-- Hiasan titik berpijar HUD -->
+    <div class="hud-dot dot-tl"></div>
+    <div class="hud-dot dot-tr"></div>
+    <div class="hud-dot dot-bl"></div>
+    <div class="hud-dot dot-br"></div>
+    <div class="hud-dot dot-mid-left"></div>
+    <div class="hud-dot dot-mid-right"></div>
+
+    <!-- Sisi Kiri: Gambar Hacker -->
+    <div class="visual-side">
+      <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1000&auto=format&fit=crop" alt="Hacker Visual">
+      <div class="visual-overlay"></div>
+    </div>
+
+    <!-- Sisi Kanan: Form Login -->
+    <div class="form-side">
+      <h2>Log in to your account</h2>
+      <p class="subtitle">Use your work email to log in to your workplace</p>
+
+      <button class="btn-google">
+        <i class="fab fa-google"></i> Log in with Google
+      </button>
+
+      <div class="divider">
+        <span>Or continue with email</span>
+      </div>
+
+      <form onsubmit="event.preventDefault();">
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" value="s.l.sharkey@outlook.com" required>
+        </div>
+
+        <div class="form-group">
+          <div class="label-row">
+            <label for="password">Password</label>
+            <a href="#" class="forgot-link">Forgot password?</a>
+          </div>
+          <div class="input-wrapper">
+            <input type="password" id="password" value="12345678" required>
+            <i class="far fa-eye toggle-password" id="eyeIcon" onclick="togglePasswordVisibility()"></i>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit">Log in</button>
+      </form>
+
+      <p class="signup-text">
+        Don't have an account yet? <a href="#">Sign up</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const eyeIcon = document.getElementById('eyeIcon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    }
+  </script>
+</body>
+</html>
+  
 </body>
 </html>
