@@ -1,6 +1,136 @@
-<!DOCTYPEDOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Kasir - Nuansa Hijau</title>
+  <style>
+    :root {
+      --bg-dark: #05130b;
+      --primary-green: #10b981;
+      --accent-green: #059669;
+      --glow-green: rgba(16, 185, 129, 0.4);
+      --glass-bg: rgba(6, 32, 20, 0.5);
+      --glass-border: rgba(52, 211, 153, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.15), transparent 60%),
+        radial-gradient(circle at 80% 80%, rgba(5, 150, 105, 0.1), transparent 50%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Efek garis cyber background */
+    body::before {
+      content: '';
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 40px,
+        rgba(16, 185, 129, 0.03) 40px,
+        rgba(16, 185, 129, 0.03) 80px
+      );
+      pointer-events: none;
+    }
+
+    /* Container Kartu Glassmorphism */
+    .login-card {
+      width: 360px;
+      padding: 35px 28px;
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 
+        0 15px 35px rgba(0, 0, 0, 0.6),
+        inset 0 0 15px rgba(16, 185, 129, 0.1),
+        0 0 25px var(--glow-green);
+      position: relative;
+      z-index: 10;
+    }
+
+    /* Header Form */
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .card-header h2 {
+      color: #ffffff;
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    .card-header a {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-size: 15px;
+      transition: color 0.3s;
+    }
+
+    .card-header a:hover {
+      color: #6ee7b7;
+    }
+
+    /* Input Field Group */
+    .input-group {
+      position: relative;
+      margin-bottom: 20px;
+      background: rgba(1, 22, 12, 0.6);
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      height: 52px;
+      transition: all 0.3s ease;
+    }
+
+    .input-group:focus-within {
+      border-color: var(--primary-green);
+      box-shadow: 0 0 12px var(--glow-green);
+    }
+
+    .input-icon {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: #6ee7b7;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+
+    .prefix {
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 500;
+      padding-right: 10px;
+
   <meta charset="UTF-8">
   <title>Aplikasi Kasir</title>
   
