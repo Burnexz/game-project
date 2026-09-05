@@ -1,0 +1,73 @@
+<!DOCTYPEDOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Aplikasi Kasir</title>
+  
+  <!-- 1. SCRIPT LIBRARY QR CODE (WAJIB DI HEAD) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+  <h1>Sistem Kasir POS</h1>
+
+  <!-- 2. PILIHAN METODE PEMBAYARAN -->
+  <div class="pembayaran-section">
+    <h3>Pilih Metode Pembayaran</h3>
+    <label><input type="radio" name="metode_bayar" value="cash" checked> Cash (Tunai)</label><br>
+    <label><input type="radio" name="metode_bayar" value="qris"> QRIS (DANA/Gopay/dll)</label><br><br>
+    <button onclick="prosesPembayaran()">Bayar Sekarang</button>
+  </div>
+
+  <!-- 3. POPUP / MODAL TAMPILAN QRIS (DISAMBUNG DI BAWAH TAMPILAN KASIR) -->
+  <div id="modalQris" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); text-align:center; padding-top:80px; z-index:9999;">
+    <div style="background:#fff; display:inline-block; padding:25px; border-radius:12px; width:300px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+      <h3 style="margin-top:0;">Scan Kode QRIS</h3>
+      <p id="totalTagihanText" style="font-weight:bold; font-size:18px; color:#2c3e50;"></p>
+      
+      <!-- Gambar QRIS Muncul Di Sini -->
+      <div id="qrcodeArea" style="margin:15px auto; display:flex; justify-content:center;"></div>
+      
+      <p style="font-size:12px; color:#7f8c8d;">Buka DANA / Aplikasi e-wallet untuk scan</p>
+      <button onclick="tutupModalQRIS()" style="padding:8px 16px; background:#e74c3c; color:#fff; border:none; border-radius:5px; cursor:pointer;">Selesai / Batal</button>
+    </div>
+  </div>
+
+  <!-- 4. LOGIKA JAVASCRIPT (SISIHKAN SEBELUM TAG PENUTUP </body>) -->
+  <script>
+    // Hubungkan variabel ini dengan variabel penampung total belanja di kasir Anda
+    let totalBelanjaan = 75000; 
+
+    function prosesPembayaran() {
+      const metode = document.querySelector('input[name="metode_bayar"]:checked').value;
+
+      if (metode === 'qris') {
+        tampilkanQRIS(totalBelanjaan);
+      } else {
+        alert('Pembayaran tunai diproses. Silakan cetak struk.');
+      }
+    }
+
+    function tampilkanQRIS(nominal) {
+      document.getElementById('qrcodeArea').innerHTML = "";
+      document.getElementById('totalTagihanText').innerText = "Rp " + nominal.toLocaleString('id-ID');
+
+      // String dummy QRIS (pada sistem resmi, string ini didapat dari API backend DANA)
+      let qrisPayload = "00020101021226680016ID.CO.DANA.WWW0118936009110000000000520459995303360540" + nominal + "5802ID5909NAMA_TOKO6007JAKARTA6304ABCD";
+
+      new QRCode(document.getElementById("qrcodeArea"), {
+        text: qrisPayload,
+        width: 200,
+        height: 200
+      });
+
+      document.getElementById('modalQris').style.display = "block";
+    }
+
+    function tutupModalQRIS() {
+      document.getElementById('modalQris').style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
