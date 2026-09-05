@@ -130,72 +130,108 @@
       font-size: 15px;
       font-weight: 500;
       padding-right: 10px;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
+      margin-right: 10px;
+    }
 
-  <meta charset="UTF-8">
-  <title>Aplikasi Kasir</title>
-  
-  <!-- 1. SCRIPT LIBRARY QR CODE (WAJIB DI HEAD) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    .input-group input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #ffffff;
+      font-size: 14px;
+    }
+
+    .input-group input::placeholder {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .eye-icon {
+      cursor: pointer;
+      stroke: rgba(255, 255, 255, 0.5);
+      transition: stroke 0.3s;
+    }
+
+    .eye-icon:hover {
+      stroke: #ffffff;
+    }
+
+    /* Tombol Masuk */
+    .btn-submit {
+      width: 100%;
+      height: 50px;
+      margin-top: 10px;
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      border: 1px solid rgba(110, 231, 183, 0.5);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+      transition: all 0.3s ease;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.6);
+      background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+    }
+  </style>
 </head>
 <body>
 
-  <h1>Sistem Kasir POS</h1>
-
-  <!-- 2. PILIHAN METODE PEMBAYARAN -->
-  <div class="pembayaran-section">
-    <h3>Pilih Metode Pembayaran</h3>
-    <label><input type="radio" name="metode_bayar" value="cash" checked> Cash (Tunai)</label><br>
-    <label><input type="radio" name="metode_bayar" value="qris"> QRIS (DANA/Gopay/dll)</label><br><br>
-    <button onclick="prosesPembayaran()">Bayar Sekarang</button>
-  </div>
-
-  <!-- 3. POPUP / MODAL TAMPILAN QRIS (DISAMBUNG DI BAWAH TAMPILAN KASIR) -->
-  <div id="modalQris" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); text-align:center; padding-top:80px; z-index:9999;">
-    <div style="background:#fff; display:inline-block; padding:25px; border-radius:12px; width:300px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-      <h3 style="margin-top:0;">Scan Kode QRIS</h3>
-      <p id="totalTagihanText" style="font-weight:bold; font-size:18px; color:#2c3e50;"></p>
-      
-      <!-- Gambar QRIS Muncul Di Sini -->
-      <div id="qrcodeArea" style="margin:15px auto; display:flex; justify-content:center;"></div>
-      
-      <p style="font-size:12px; color:#7f8c8d;">Buka DANA / Aplikasi e-wallet untuk scan</p>
-      <button onclick="tutupModalQRIS()" style="padding:8px 16px; background:#e74c3c; color:#fff; border:none; border-radius:5px; cursor:pointer;">Selesai / Batal</button>
+  <div class="login-card">
+    <div class="card-header">
+      <h2>Masuk</h2>
+      <a href="#">Daftar &rsaquo;</a>
     </div>
+
+    <form onsubmit="return false;">
+      <div class="input-group">
+        <svg class="input-icon" viewBox="0 0 24 24">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        <span class="prefix">+62</span>
+        <input type="tel" placeholder="Masukkan nomor Telepon" required>
+      </div>
+
+      <div class="input-group">
+        <svg class="input-icon" viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <input type="password" id="passwordInput" placeholder="Masukkan sandi" required>
+        
+        <svg class="input-icon eye-icon" id="eyeIcon" viewBox="0 0 24 24" onclick="togglePassword()">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </div>
+
+      <button type="submit" class="btn-submit">
+        Masuk <span>&rsaquo;</span>
+      </button>
+    </form>
   </div>
 
-  <!-- 4. LOGIKA JAVASCRIPT (SISIHKAN SEBELUM TAG PENUTUP </body>) -->
   <script>
-    // Hubungkan variabel ini dengan variabel penampung total belanja di kasir Anda
-    let totalBelanjaan = 75000; 
-
-    function prosesPembayaran() {
-      const metode = document.querySelector('input[name="metode_bayar"]:checked').value;
-
-      if (metode === 'qris') {
-        tampilkanQRIS(totalBelanjaan);
+    function togglePassword() {
+      const passwordInput = document.getElementById('passwordInput');
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
       } else {
-        alert('Pembayaran tunai diproses. Silakan cetak struk.');
+        passwordInput.type = 'password';
       }
-    }
-
-    function tampilkanQRIS(nominal) {
-      document.getElementById('qrcodeArea').innerHTML = "";
-      document.getElementById('totalTagihanText').innerText = "Rp " + nominal.toLocaleString('id-ID');
-
-      // String dummy QRIS (pada sistem resmi, string ini didapat dari API backend DANA)
-      let qrisPayload = "00020101021226680016ID.CO.DANA.WWW0118936009110000000000520459995303360540" + nominal + "5802ID5909NAMA_TOKO6007JAKARTA6304ABCD";
-
-      new QRCode(document.getElementById("qrcodeArea"), {
-        text: qrisPayload,
-        width: 200,
-        height: 200
-      });
-
-      document.getElementById('modalQris').style.display = "block";
-    }
-
-    function tutupModalQRIS() {
-      document.getElementById('modalQris').style.display = "none";
     }
   </script>
 
