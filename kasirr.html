@@ -3,269 +3,256 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - SYSTEM_ACCESS</title>
+  <title>Cyber-Glass Login</title>
   <style>
-    /* Mengimpor font bergaya terminal/coding */
-    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
-
-    :root {
-      --bg-color: #050505;
-      --term-green: #0f0;
-      --term-dark-green: #003300;
-      --alert-red: #ff003c;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Poppins:wght@400;600&display=swap');
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Share Tech Mono', monospace;
     }
 
     body {
-      background-color: var(--bg-color);
-      color: var(--term-green);
+      background-color: #020b06;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       overflow: hidden;
       position: relative;
+      font-family: 'Poppins', sans-serif;
     }
 
-    /* Efek garis scan TV jadul (Scanlines) */
-    body::after {
-      content: " ";
-      display: block;
-      position: absolute;
+    /* Canvas Latar Belakang Matrix */
+    #matrixCanvas {
+      position: fixed;
       top: 0;
       left: 0;
-      bottom: 0;
-      right: 0;
-      background: linear-gradient(
-        to bottom,
-        rgba(18, 16, 16, 0) 50%,
-        rgba(0, 0, 0, 0.25) 50%
-      );
-      background-size: 100% 4px;
-      z-index: 50;
-      pointer-events: none;
-    }
-
-    /* Efek layar berkedip halus */
-    .screen-flicker {
-      animation: flicker 0.15s infinite;
       width: 100%;
       height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      z-index: 1;
     }
 
-    @keyframes flicker {
-      0% { opacity: 0.95; }
-      100% { opacity: 1; }
-    }
-
-    /* Kotak Login */
-    .terminal-card {
-      width: 400px;
-      background: rgba(0, 20, 0, 0.8);
-      border: 2px solid var(--term-green);
-      padding: 30px;
+    /* Kartu Login Glassmorphism */
+    .login-card {
       position: relative;
-      box-shadow: 0 0 15px var(--term-dark-green), inset 0 0 20px var(--term-dark-green);
       z-index: 10;
+      width: 360px;
+      padding: 35px 28px;
+      background: rgba(4, 28, 16, 0.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 20px;
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.8),
+        inset 0 0 15px rgba(16, 185, 129, 0.15),
+        0 0 30px rgba(16, 185, 129, 0.3);
     }
 
-    /* Sudut-sudut kotak bergaya cyberpunk */
-    .terminal-card::before,
-    .terminal-card::after {
-      content: '';
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      border: 2px solid var(--term-green);
-    }
-
-    .terminal-card::before {
-      top: -6px; left: -6px;
-      border-right: none; border-bottom: none;
-    }
-
-    .terminal-card::after {
-      bottom: -6px; right: -6px;
-      border-left: none; border-top: none;
-    }
-
-    /* Header */
-    .header {
-      margin-bottom: 30px;
-      border-bottom: 1px dashed var(--term-green);
+    /* Header Form */
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 25px;
+      border-bottom: 1px dashed rgba(52, 211, 153, 0.3);
       padding-bottom: 10px;
     }
 
-    .header h2 {
-      font-size: 24px;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      text-shadow: 0 0 5px var(--term-green);
-      display: flex;
-      align-items: center;
-    }
-    
-    /* Animasi kursor berkedip di judul */
-    .header h2::after {
-      content: '_';
-      animation: blink 1s step-start infinite;
-      margin-left: 5px;
+    .card-header h2 {
+      color: #ffffff;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-shadow: 0 0 10px rgba(16, 185, 129, 0.6);
     }
 
-    @keyframes blink {
-      50% { opacity: 0; }
-    }
-
-    .sys-msg {
+    .card-header span {
+      font-family: 'Share Tech Mono', monospace;
+      color: #34d399;
       font-size: 12px;
-      margin-top: 5px;
-      color: rgba(0, 255, 0, 0.7);
+      letter-spacing: 1px;
     }
 
-    /* Area Input */
+    /* Input Group */
     .input-group {
-      margin-bottom: 25px;
       position: relative;
-    }
-
-    .input-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 14px;
-      text-transform: uppercase;
-    }
-
-    .input-wrapper {
+      margin-bottom: 20px;
+      background: rgba(0, 15, 8, 0.65);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+      border-radius: 12px;
       display: flex;
       align-items: center;
-      border: 1px solid var(--term-green);
-      background: #000;
-      padding: 0 10px;
+      padding: 0 15px;
+      height: 52px;
+      transition: all 0.3s ease;
+    }
+
+    .input-group:focus-within {
+      border-color: #10b981;
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+    }
+
+    .input-icon {
+      width: 20px;
+      height: 20px;
+      fill: none;
+      stroke: #34d399;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      margin-right: 10px;
+      flex-shrink: 0;
     }
 
     .prefix {
-      color: var(--term-green);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      padding-right: 10px;
+      border-right: 1px solid rgba(255, 255, 255, 0.2);
       margin-right: 10px;
+      font-family: 'Share Tech Mono', monospace;
     }
 
-    .input-wrapper input {
+    .input-group input {
       width: 100%;
       background: transparent;
       border: none;
       outline: none;
-      color: var(--term-green);
-      font-size: 16px;
-      padding: 12px 0;
-      text-shadow: 0 0 2px var(--term-green);
+      color: #ffffff;
+      font-size: 14px;
+      font-family: 'Share Tech Mono', monospace;
     }
 
-    .input-wrapper input::placeholder {
-      color: rgba(0, 255, 0, 0.3);
+    .input-group input::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+      font-family: 'Poppins', sans-serif;
     }
 
-    /* Saat input fokus */
-    .input-wrapper:focus-within {
-      background: var(--term-dark-green);
-      box-shadow: 0 0 8px var(--term-green);
-    }
-
-    /* Tombol Execute */
-    .btn-execute {
-      width: 100%;
-      background: transparent;
-      color: var(--term-green);
-      border: 1px solid var(--term-green);
-      padding: 15px;
-      font-size: 18px;
-      text-transform: uppercase;
+    .eye-icon {
       cursor: pointer;
-      transition: all 0.2s;
-      letter-spacing: 2px;
-      position: relative;
-      overflow: hidden;
+      stroke: rgba(255, 255, 255, 0.5);
+      transition: stroke 0.3s;
     }
 
-    .btn-execute:hover {
-      background: var(--term-green);
-      color: #000;
-      box-shadow: 0 0 15px var(--term-green);
-      font-weight: bold;
+    .eye-icon:hover {
+      stroke: #34d399;
     }
 
-    /* Efek error (opsional jika salah sandi) */
-    .error-msg {
-      color: var(--alert-red);
-      font-size: 12px;
+    /* Tombol Masuk */
+    .btn-submit {
+      width: 100%;
+      height: 50px;
       margin-top: 10px;
-      display: none;
-      text-shadow: 0 0 5px var(--alert-red);
+      background: linear-gradient(135deg, #10b981 0%, #047857 100%);
+      border: 1px solid rgba(110, 231, 183, 0.6);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(16, 185, 129, 0.7);
+      background: linear-gradient(135deg, #34d399 0%, #059669 100%);
     }
   </style>
 </head>
 <body>
 
-  <div class="screen-flicker">
-    <div class="terminal-card">
-      <div class="header">
-        <h2>AUTH_REQUIRED</h2>
-        <p class="sys-msg">ESTABLISHING SECURE CONNECTION...</p>
+  <!-- Background Animasi Matrix -->
+  <canvas id="matrixCanvas"></canvas>
+
+  <!-- Kartu Glassmorphism -->
+  <div class="login-card">
+    <div class="card-header">
+      <h2>Masuk</h2>
+      <span>SYS_AUTH v2.0</span>
+    </div>
+
+    <form onsubmit="return false;">
+      <div class="input-group">
+        <svg class="input-icon" viewBox="0 0 24 24">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        <span class="prefix">+62</span>
+        <input type="tel" placeholder="Masukkan nomor Telepon" required autocomplete="off">
       </div>
 
-      <form onsubmit="return false;">
-        <!-- Input ID / Telepon -->
-        <div class="input-group">
-          <label>> IDENTIFICATION_ID</label>
-          <div class="input-wrapper">
-            <span class="prefix">USER:</span>
-            <input type="text" placeholder="Enter ID or Phone Number" autocomplete="off" required>
-          </div>
-        </div>
+      <div class="input-group">
+        <svg class="input-icon" viewBox="0 0 24 24">
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <input type="password" id="passwordInput" placeholder="Masukkan sandi" required>
+        
+        <svg class="input-icon eye-icon" id="eyeIcon" viewBox="0 0 24 24" onclick="togglePassword()">
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+        </svg>
+      </div>
 
-        <!-- Input Password -->
-        <div class="input-group">
-          <label>> ACCESS_KEY</label>
-          <div class="input-wrapper">
-            <span class="prefix">PASS:</span>
-            <input type="password" placeholder="Enter Security Key" autocomplete="off" required>
-          </div>
-          <!-- Pesan error disembunyikan secara default -->
-          <p class="error-msg" id="errorMsg">ACCESS DENIED. INVALID CREDENTIALS.</p>
-        </div>
-
-        <!-- Tombol Execute -->
-        <button type="submit" class="btn-execute" onclick="checkLogin()">
-          [ EXECUTE ]
-        </button>
-      </form>
-    </div>
+      <button type="submit" class="btn-submit">
+        Masuk <span>&rsaquo;</span>
+      </button>
+    </form>
   </div>
 
   <script>
-    // Contoh script sederhana untuk menampilkan efek error
-    function checkLogin() {
-      const btn = document.querySelector('.btn-execute');
-      btn.innerText = "VERIFYING...";
-      
-      setTimeout(() => {
-        // Simulasi error untuk efek hacker
-        document.getElementById('errorMsg').style.display = 'block';
-        btn.innerText = "[ EXECUTE ]";
-        
-        // Mengembalikan warna normal setelah 2 detik
-        setTimeout(() => {
-           document.getElementById('errorMsg').style.display = 'none';
-        }, 2000);
-      }, 800);
+    // 1. Script Intip Password
+    function togglePassword() {
+      const passwordInput = document.getElementById('passwordInput');
+      passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
     }
+
+    // 2. Script Generator Matrix Binary Rain
+    const canvas = document.getElementById('matrixCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const chars = '01'; // Kode biner 0 dan 1
+    const fontSize = 16;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function drawMatrix() {
+      ctx.fillStyle = 'rgba(2, 11, 6, 0.1)'; // Efek jejak pudar
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = '#0f0'; // Warna hijau biner
+      ctx.font = fontSize + 'px "Share Tech Mono", monospace';
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+        drops[i]++;
+      }
+    }
+
+    setInterval(drawMatrix, 33);
   </script>
 
 </body>
