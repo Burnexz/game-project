@@ -7,6 +7,15 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Styling Dasar Kustom */
+    @keyframes marquee {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+.animate-marquee {
+  display: inline-block;
+  animation: marquee 18s linear infinite;
+}
+    
     body {
       background-color: black;
       font-family: 'ui-monospace', 'SFMono-Regular', Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
