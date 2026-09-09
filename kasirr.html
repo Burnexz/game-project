@@ -1,22 +1,38 @@
-<div class="relative z-10 max-w-md w-full glass-card p-8 rounded-2xl glow-box space-y-6">
-  <div class="text-center space-y-2">
-    <div class="text-3xl">&gt;_</div>
-    <h1 class="text-lg font-black glow-green-text uppercase tracking-wider">RESTRICTED LOGIN</h1>
-    <p class="text-xs text-emerald-400/70">ZOKENT GROUP SECURE AUTHENTICATION</p>
-  </div>
+body {
+  background-color: #000300;
+  color: #00ff66;
+}
 
-  <!-- SISIPKAN ELEMEN TEKS BERJALAN DI SINI -->
-  <div class="overflow-hidden whitespace-nowrap border-y border-emerald-500/30 py-1.5 bg-black/50 rounded-lg text-[10px] text-emerald-400 font-mono">
-    <div class="animate-marquee">
-      &gt;&gt; SYSTEM ENCRYPTION ACTIVE --- RESTRICTED ACCESS AREA --- ZOKENT GROUP SECURE TERMINAL --- UNAUTHORIZED ATTEMPTS WILL BE TRACED &lt;&lt;
-    </div>
-  </div>
+.glow-green-text {
+  color: #00ff66;
+  text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66, 0 0 30px #00ff66;
+}
 
-  <form id="form-login" class="space-y-4">
-    <div>
-      <label class="block text-[11px] font-bold text-emerald-400 uppercase mb-1.5 tracking-wider">EMAIL SISTEM</label>
-      <input type="email" id="email-input" required class="hacker-input w-full px-4 py-3 rounded-xl text-xs font-mono">
-    </div>
-    <!-- Sisa form login Anda... -->
-  </form>
-</div>
+.glow-box {
+  box-shadow: 0 0 30px rgba(0, 255, 102, 0.5), inset 0 0 15px rgba(0, 255, 102, 0.2);
+}
+
+.glass-card {
+  background-color: rgba(0, 10, 3, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid #00ff66;
+  box-shadow: 0 0 25px rgba(0, 255, 102, 0.4);
+}
+
+.hacker-input {
+  background-color: rgba(0, 0, 0, 0.9);
+  border: 1px solid #00ff66;
+  color: #00ff66;
+  text-shadow: 0 0 8px #00ff66;
+}
+
+.hacker-input::placeholder {
+  color: rgba(0, 255, 102, 0.4);
+}
+
+.hacker-input:focus {
+  outline: none;
+  border-color: #00ff66;
+  box-shadow: 0 0 20px #00ff66, 0 0 10px rgba(0, 255, 102, 0.8) inset;
+  background-color: rgba(0, 0, 0, 0.95);
+}
