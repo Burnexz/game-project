@@ -265,7 +265,7 @@ body{
     justify-content:center;
 }
 
-/* CONTENT & SPA / IFRAME SECTIONS */
+/* CONTENT & SPA SECTIONS */
 .content{
     padding:20px 25px;
     flex: 1;
@@ -283,7 +283,7 @@ body{
     display: none !important;
 }
 
-/* IFRAME WRAPPER UNTUK KASIR, PRODUK, DLL */
+/* IFRAME MUNCUL DI PANEL KANAN */
 .content-iframe {
     width: 100%;
     height: calc(100vh - 95px);
@@ -566,14 +566,14 @@ body{
 
     <div class="menu-section">Utama</div>
     <div class="menu">
-        <button class="menu-btn active" data-target="sec-dashboard" onclick="switchPage('sec-dashboard', 'kasir.html', this)">
+        <button class="menu-btn active" data-target="sec-dashboard" onclick="switchPage('sec-dashboard', null, this)">
             <span class="menu-icon">▦</span> Dashboard
         </button>
     </div>
 
     <div class="menu-section">Penjualan</div>
     <div class="menu">
-        <!-- TOMBOL KASIR: Memuat kasir.html di panel kanan -->
+        <!-- KASIR: Memuat kasir.html di panel kanan -->
         <button class="menu-btn" data-target="sec-kasir" onclick="switchPage('sec-kasir', 'kasir.html', this)"><span class="menu-icon">💰</span> Kasir</button>
         <button class="menu-btn" data-target="sec-pesanan" onclick="switchPage('sec-pesanan', 'pesanan.html', this)"><span class="menu-icon">🧾</span> Pesanan <span class="menu-arrow">›</span></button>
         <button class="menu-btn" data-target="sec-invoice" onclick="switchPage('sec-invoice', 'invoice.html', this)"><span class="menu-icon">📄</span> Invoice</button>
@@ -861,7 +861,7 @@ function switchPage(targetSectionId, iframePage = null, btnElement = null) {
     if (target) {
         target.classList.remove('hidden');
         
-        // Jika section tersebut memiliki iframe dan belum dimuat, isi src-nya agar file kasir.html muncul di kanan
+        // Jika section tersebut memiliki iframe dan belum dimuat, isi src-nya secara otomatis
         const iframe = target.querySelector('iframe');
         if (iframe && iframePage && !iframe.getAttribute('src')) {
             iframe.setAttribute('src', iframePage);
