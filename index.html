@@ -3,318 +3,1502 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kasir POS - src zokent</title>
+
+  <title>Kasir POS - SRC Zokent</title>
+
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     tailwind.config = {
-      theme: { extend: { fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] } } }
-    };
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: "#eff6ff",
+              100: "#dbeafe",
+              500: "#2563eb",
+              600: "#1d4ed8",
+              700: "#1e40af",
+              800: "#1e3a8a"
+            }
+          }
+        }
+      }
+    }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
   <style>
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .sheet { transition: transform .3s ease; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+        BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    .number-input::-webkit-inner-spin-button,
+    .number-input::-webkit-outer-spin-button {
+      opacity: 1;
+    }
   </style>
 </head>
-<body class="bg-slate-100 font-sans text-slate-800 antialiased">
 
-  <div class="flex h-screen flex-col lg:flex-row overflow-hidden">
+<body class="bg-slate-100 min-h-screen">
 
-    <!-- ================= KOLOM KIRI: PRODUK (60%) ================= -->
-    <main class="flex h-full w-full flex-col lg:w-3/5">
-      <!-- Header -->
-      <header class="bg-white px-4 pt-4 pb-3 shadow-sm sm:px-6">
-        <div class="flex items-center justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600 text-lg font-extrabold text-white">S</div>
-            <div>
-              <h1 class="text-base font-bold leading-tight">src zokent</h1>
-              <p class="text-xs text-slate-500" id="tanggal"></p>
-            </div>
-          </div>
-          <div class="relative w-full max-w-xs">
-            <svg class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-            <input id="cari" type="text" placeholder="Cari produk..." class="w-full rounded-xl border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm outline-none focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-100" />
-          </div>
-        </div>
-        <!-- Filter kategori -->
-        <div id="kategori" class="no-scrollbar -mx-1 mt-3 flex gap-2 overflow-x-auto px-1 pb-1"></div>
-      </header>
+  <!-- HEADER -->
+  <header class="bg-brand-700 text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 py-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
 
-      <!-- Grid produk -->
-      <section class="flex-1 overflow-y-auto p-4 pb-28 sm:p-6 lg:pb-6">
-        <div id="grid" class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 xl:grid-cols-4"></div>
-        <p id="kosong" class="hidden py-20 text-center text-slate-400">Produk tidak ditemukan.</p>
-      </section>
-    </main>
-
-    <!-- ================= KOLOM KANAN: KERANJANG (40%) ================= -->
-    <!-- Desktop: panel tetap. Mobile: bottom sheet -->
-    <aside id="panel" class="sheet fixed inset-x-0 bottom-0 z-30 flex h-[88vh] translate-y-full flex-col rounded-t-3xl bg-white shadow-2xl lg:static lg:z-auto lg:h-full lg:w-2/5 lg:translate-y-0 lg:rounded-none lg:border-l lg:border-slate-200 lg:shadow-none">
-      <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4">
         <div>
-          <h2 class="text-lg font-bold">Keranjang</h2>
-          <p class="text-xs text-slate-500"><span id="jmlItem">0</span> item</p>
-        </div>
-        <div class="flex items-center gap-2">
-          <button id="kosongkan" class="rounded-lg px-3 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50">Kosongkan</button>
-          <button id="tutupPanel" class="rounded-lg p-2 text-slate-500 hover:bg-slate-100 lg:hidden" aria-label="Tutup">
-            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
-          </button>
-        </div>
-      </div>
+          <h1 class="text-2xl font-bold">
+            SRC Zokent
+          </h1>
 
-      <!-- Daftar item -->
-      <div id="items" class="flex-1 space-y-3 overflow-y-auto px-5 py-4"></div>
+          <p class="text-blue-100 text-sm">
+            Point of Sale / Kasir
+          </p>
+        </div>
 
-      <!-- Ringkasan -->
-      <div class="border-t border-slate-100 bg-slate-50 px-5 pt-4 pb-5">
-        <div class="space-y-2 text-sm">
-          <div class="flex justify-between"><span class="text-slate-500">Subtotal</span><span id="subtotal" class="font-medium">Rp 0</span></div>
-          <div class="flex items-center justify-between">
-            <span class="flex items-center gap-2 text-slate-500">Diskon
-              <span class="relative">
-                <input id="diskonPersen" type="number" min="0" max="100" value="0" class="w-16 rounded-lg border border-slate-200 bg-white py-1 pl-2 pr-6 text-right text-xs outline-none focus:border-indigo-500" />
-                <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-slate-400">%</span>
-              </span>
-            </span>
-            <span id="diskon" class="font-medium text-emerald-600">- Rp 0</span>
+        <div class="bg-white/10 rounded-xl px-4 py-2">
+          <div class="text-xs text-blue-100">
+            No. Transaksi
           </div>
-          <div class="flex justify-between"><span class="text-slate-500">Pajak (PPN 11%)</span><span id="pajak" class="font-medium">Rp 0</span></div>
+
+          <div id="transactionCode"
+               class="font-bold tracking-wide">
+            -
+          </div>
         </div>
-        <div class="my-3 border-t border-dashed border-slate-300"></div>
-        <div class="mb-4 flex items-end justify-between">
-          <span class="text-sm font-medium text-slate-500">Total</span>
-          <span id="total" class="text-3xl font-extrabold tracking-tight text-indigo-600">Rp 0</span>
-        </div>
-        <button id="bayar" class="w-full rounded-2xl bg-indigo-600 py-4 text-lg font-bold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700 active:scale-[.99] disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none" disabled>Bayar</button>
-      </div>
-    </aside>
-  </div>
 
-  <!-- Tombol keranjang melayang (mobile) -->
-  <button id="bukaPanel" class="fixed inset-x-4 bottom-4 z-20 flex items-center justify-between rounded-2xl bg-indigo-600 px-5 py-4 text-white shadow-xl lg:hidden">
-    <span class="flex items-center gap-2 font-semibold">
-      <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6h15l-1.5 9h-12z"/><path d="M6 6 5 3H2"/><circle cx="9" cy="20" r="1.5"/><circle cx="18" cy="20" r="1.5"/></svg>
-      Keranjang (<span id="jmlItemFab">0</span>)
-    </span>
-    <span id="totalFab" class="font-bold">Rp 0</span>
-  </button>
-  <div id="overlay" class="fixed inset-0 z-20 hidden bg-slate-900/40 lg:hidden"></div>
-
-  <!-- ================= MODAL PEMBAYARAN ================= -->
-  <div id="modal" class="fixed inset-0 z-40 hidden items-center justify-center bg-slate-900/50 p-4">
-    <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl">
-      <h3 class="text-xl font-bold">Pembayaran</h3>
-      <p class="mt-1 text-sm text-slate-500">Total tagihan</p>
-      <p id="mTotal" class="text-3xl font-extrabold text-indigo-600">Rp 0</p>
-
-      <label class="mt-5 block text-sm font-medium text-slate-600">Uang diterima</label>
-      <input id="uang" type="number" inputmode="numeric" placeholder="0" class="mt-1 w-full rounded-xl border border-slate-200 px-4 py-3 text-lg font-semibold outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100" />
-      <div id="cepat" class="mt-3 flex flex-wrap gap-2"></div>
-
-      <div class="mt-5 flex items-center justify-between rounded-xl bg-slate-50 px-4 py-3">
-        <span class="text-sm text-slate-500">Kembalian</span>
-        <span id="kembalian" class="text-lg font-bold text-emerald-600">Rp 0</span>
-      </div>
-
-      <div class="mt-6 grid grid-cols-2 gap-3">
-        <button id="batal" class="rounded-xl border border-slate-200 py-3 font-semibold text-slate-600 hover:bg-slate-50">Batal</button>
-        <button id="konfirmasi" class="rounded-xl bg-indigo-600 py-3 font-semibold text-white hover:bg-indigo-700 disabled:bg-slate-300" disabled>Selesaikan</button>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Toast -->
-  <div id="toast" class="pointer-events-none fixed left-1/2 top-4 z-50 -translate-x-1/2 -translate-y-20 rounded-xl bg-slate-900 px-5 py-3 text-sm font-medium text-white opacity-0 shadow-lg transition-all duration-300"></div>
 
-<script>
-  // ---------- DATA PRODUK ----------
-  // Isi "img" dengan URL gambar produk. Jika kosong, ditampilkan emoji sebagai placeholder.
-  const PRODUK = [
-    { id: 1,  nama: 'Kopi Susu Gula Aren', harga: 18000, kategori: 'Minuman',  emoji: '🥤', img: '' },
-    { id: 2,  nama: 'Es Teh Manis',        harga: 8000,  kategori: 'Minuman',  emoji: '🧋', img: '' },
-    { id: 3,  nama: 'Air Mineral 600ml',   harga: 5000,  kategori: 'Minuman',  emoji: '💧', img: '' },
-    { id: 4,  nama: 'Jus Jeruk',           harga: 14000, kategori: 'Minuman',  emoji: '🍊', img: '' },
-    { id: 5,  nama: 'Nasi Goreng Spesial', harga: 25000, kategori: 'Makanan',  emoji: '🍛', img: '' },
-    { id: 6,  nama: 'Mie Ayam Bakso',      harga: 22000, kategori: 'Makanan',  emoji: '🍜', img: '' },
-    { id: 7,  nama: 'Ayam Geprek',         harga: 23000, kategori: 'Makanan',  emoji: '🍗', img: '' },
-    { id: 8,  nama: 'Roti Bakar Coklat',   harga: 15000, kategori: 'Snack',    emoji: '🍞', img: '' },
-    { id: 9,  nama: 'Kentang Goreng',      harga: 16000, kategori: 'Snack',    emoji: '🍟', img: '' },
-    { id: 10, nama: 'Keripik Singkong',    harga: 10000, kategori: 'Snack',    emoji: '🥔', img: '' },
-    { id: 11, nama: 'Brownies Coklat',     harga: 12000, kategori: 'Dessert',  emoji: '🍫', img: '' },
-    { id: 12, nama: 'Es Krim Vanilla',     harga: 11000, kategori: 'Dessert',  emoji: '🍨', img: '' },
-  ];
-  const PPN = 0.11;
-  const WARNA = ['bg-amber-100','bg-sky-100','bg-rose-100','bg-emerald-100','bg-violet-100','bg-orange-100'];
+  <!-- MAIN -->
+  <main class="max-w-7xl mx-auto p-4">
 
-  // ---------- STATE ----------
-  let kategoriAktif = 'Semua';
-  let kataCari = '';
-  let keranjang = {};   // { id: qty }
-  let diskonPersen = 0;
+    <!-- NOTIFICATION -->
+    <div id="notification"
+         class="hidden mb-4 rounded-xl px-4 py-3 text-sm font-medium">
+    </div>
 
-  const rp = n => 'Rp ' + Math.round(n).toLocaleString('id-ID');
-  const $ = id => document.getElementById(id);
 
-  // ---------- RENDER KATEGORI ----------
-  function renderKategori() {
-    const daftar = ['Semua', ...new Set(PRODUK.map(p => p.kategori))];
-    $('kategori').innerHTML = daftar.map(k => `
-      <button data-k="${k}" class="shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition ${
-        k === kategoriAktif ? 'bg-indigo-600 text-white shadow' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-      }">${k}</button>`).join('');
-  }
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
-  // ---------- RENDER PRODUK ----------
-  function renderGrid() {
-    const hasil = PRODUK.filter(p =>
-      (kategoriAktif === 'Semua' || p.kategori === kategoriAktif) &&
-      p.nama.toLowerCase().includes(kataCari.toLowerCase())
+      <!-- LEFT / CART -->
+      <section class="lg:col-span-2">
+
+        <!-- ADD PRODUCT -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 mb-5">
+
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="font-bold text-lg text-slate-800">
+                Tambah Produk
+              </h2>
+
+              <p class="text-sm text-slate-500">
+                Masukkan informasi produk yang dibeli.
+              </p>
+            </div>
+          </div>
+
+
+          <form id="productForm"
+                class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+
+            <!-- SKU -->
+            <div class="sm:col-span-3">
+              <label class="block text-sm font-medium text-slate-700 mb-1">
+                SKU
+              </label>
+
+              <input
+                id="productSku"
+                type="text"
+                placeholder="SKU / kode"
+                class="w-full rounded-xl border border-slate-300 px-3 py-2.5 outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+
+
+            <!-- NAME -->
+            <div class="sm:col-span-4">
+              <label class="block text-sm font-medium text-slate-700 mb-1">
+                Nama Produk
+              </label>
+
+              <input
+                id="productName"
+                type="text"
+                placeholder="Nama produk"
+                required
+                class="w-full rounded-xl border border-slate-300 px-3 py-2.5 outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+
+
+            <!-- PRICE -->
+            <div class="sm:col-span-3">
+              <label class="block text-sm font-medium text-slate-700 mb-1">
+                Harga
+              </label>
+
+              <input
+                id="productPrice"
+                type="number"
+                min="0"
+                step="1"
+                placeholder="0"
+                required
+                class="w-full rounded-xl border border-slate-300 px-3 py-2.5 outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+
+
+            <!-- QTY -->
+            <div class="sm:col-span-2">
+              <label class="block text-sm font-medium text-slate-700 mb-1">
+                Qty
+              </label>
+
+              <input
+                id="productQty"
+                type="number"
+                min="1"
+                step="1"
+                value="1"
+                required
+                class="number-input w-full rounded-xl border border-slate-300 px-3 py-2.5 outline-none focus:ring-2 focus:ring-brand-500"
+              />
+            </div>
+
+
+            <!-- BUTTON -->
+            <div class="sm:col-span-12">
+              <button
+                type="submit"
+                class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white font-semibold px-6 py-3 rounded-xl transition">
+                + Tambah ke Keranjang
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+
+        <!-- CART TABLE -->
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+
+          <div class="p-4 border-b border-slate-200">
+            <div class="flex items-center justify-between">
+
+              <div>
+                <h2 class="font-bold text-lg text-slate-800">
+                  Keranjang Belanja
+                </h2>
+
+                <p id="cartInfo"
+                   class="text-sm text-slate-500">
+                  0 item
+                </p>
+              </div>
+
+              <button
+                id="clearCartButton"
+                type="button"
+                class="text-sm font-medium text-red-600 hover:text-red-700">
+                Kosongkan
+              </button>
+
+            </div>
+          </div>
+
+
+          <!-- DESKTOP TABLE -->
+          <div class="overflow-x-auto">
+
+            <table class="w-full min-w-[700px]">
+
+              <thead class="bg-slate-50">
+                <tr class="text-left text-xs uppercase tracking-wider text-slate-500">
+
+                  <th class="px-4 py-3">
+                    Produk
+                  </th>
+
+                  <th class="px-4 py-3 text-right">
+                    Harga
+                  </th>
+
+                  <th class="px-4 py-3 text-center">
+                    Qty
+                  </th>
+
+                  <th class="px-4 py-3 text-right">
+                    Subtotal
+                  </th>
+
+                  <th class="px-4 py-3 text-center">
+                    Aksi
+                  </th>
+
+                </tr>
+              </thead>
+
+              <tbody id="cartBody"
+                     class="divide-y divide-slate-100">
+              </tbody>
+
+            </table>
+
+          </div>
+
+
+          <!-- EMPTY CART -->
+          <div id="emptyCart"
+               class="py-16 text-center">
+
+            <div class="text-4xl mb-3">
+              🛒
+            </div>
+
+            <h3 class="font-semibold text-slate-700">
+              Keranjang masih kosong
+            </h3>
+
+            <p class="text-sm text-slate-500 mt-1">
+              Tambahkan produk untuk memulai transaksi.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- RIGHT / PAYMENT -->
+      <aside>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 sticky top-4">
+
+          <h2 class="font-bold text-lg text-slate-800 mb-5">
+            Ringkasan Pembayaran
+          </h2>
+
+
+          <!-- SUBTOTAL -->
+          <div class="flex justify-between text-slate-600 mb-3">
+            <span>
+              Subtotal
+            </span>
+
+            <span id="subtotalDisplay"
+                  class="font-semibold text-slate-800">
+              Rp0
+            </span>
+          </div>
+
+
+          <!-- DISCOUNT -->
+          <div class="mb-4">
+
+            <label class="block text-sm font-medium text-slate-700 mb-1">
+              Diskon
+            </label>
+
+            <input
+              id="discountInput"
+              type="number"
+              min="0"
+              value="0"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2.5 outline-none focus:ring-2 focus:ring-brand-500"
+            />
+
+          </div>
+
+
+          <!-- TOTAL -->
+          <div class="border-t border-slate-200 pt-4 mb-5">
+
+            <div class="flex justify-between items-center">
+
+              <span class="font-bold text-slate-800">
+                TOTAL
+              </span>
+
+              <span
+                id="totalDisplay"
+                class="text-2xl font-bold text-brand-700">
+                Rp0
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- PAYMENT METHOD -->
+          <div class="mb-4">
+
+            <label class="block text-sm font-medium text-slate-700 mb-1">
+              Metode Pembayaran
+            </label>
+
+            <select
+              id="paymentMethod"
+              class="w-full rounded-xl border border-slate-300 px-3 py-2.5 bg-white outline-none focus:ring-2 focus:ring-brand-500">
+
+              <option value="cash">
+                Tunai
+              </option>
+
+              <option value="qris">
+                QRIS
+              </option>
+
+              <option value="debit">
+                Debit
+              </option>
+
+              <option value="transfer">
+                Transfer
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <!-- PAYMENT -->
+          <div class="mb-4">
+
+            <label class="block text-sm font-medium text-slate-700 mb-1">
+              Uang Dibayar
+            </label>
+
+            <input
+              id="paymentInput"
+              type="number"
+              min="0"
+              value="0"
+              placeholder="0"
+              class="w-full rounded-xl border border-slate-300 px-3 py-3 text-lg font-semibold outline-none focus:ring-2 focus:ring-brand-500"
+            />
+
+          </div>
+
+
+          <!-- CHANGE -->
+          <div class="bg-slate-50 rounded-xl p-4 mb-5">
+
+            <div class="flex justify-between">
+
+              <span class="text-slate-600">
+                Kembalian
+              </span>
+
+              <span
+                id="changeDisplay"
+                class="font-bold text-green-600">
+                Rp0
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <!-- CALCULATE -->
+          <button
+            id="calculateButton"
+            type="button"
+            class="w-full border border-brand-600 text-brand-600 hover:bg-brand-50 font-semibold py-3 rounded-xl mb-3 transition">
+            Hitung Total
+          </button>
+
+
+          <!-- SAVE -->
+          <button
+            id="saveTransactionButton"
+            type="button"
+            class="w-full bg-brand-600 hover:bg-brand-700 disabled:bg-slate-300 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl transition">
+
+            <span id="saveButtonText">
+              Simpan Transaksi
+            </span>
+
+          </button>
+
+
+          <button
+            id="newTransactionButton"
+            type="button"
+            class="hidden w-full mt-3 border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold py-3 rounded-xl">
+            Transaksi Baru
+          </button>
+
+        </div>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+
+  <!-- =========================
+       JAVASCRIPT
+       ========================= -->
+
+  <script>
+
+    /*
+     * ==========================================================
+     * 1. KONFIGURASI SUPABASE
+     * ==========================================================
+     *
+     * GANTI dua nilai berikut dengan project Supabase Anda.
+     *
+     * Jangan gunakan service_role key di frontend.
+     * Gunakan hanya anon/public key.
+     */
+
+    const SUPABASE_URL = "https://YOUR_PROJECT.supabase.co";
+
+    const SUPABASE_ANON_KEY = "YOUR_SUPABASE_ANON_KEY";
+
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
     );
-    $('kosong').classList.toggle('hidden', hasil.length > 0);
-    $('grid').innerHTML = hasil.map(p => `
-      <div class="group flex flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-100 transition hover:shadow-md">
-        <div class="relative flex aspect-[4/3] items-center justify-center ${WARNA[p.id % WARNA.length]}">
-          ${p.img
-            ? `<img src="${p.img}" alt="${p.nama}" class="h-full w-full object-cover" loading="lazy" />`
-            : `<span class="text-5xl transition group-hover:scale-110">${p.emoji}</span>`}
-          ${keranjang[p.id] ? `<span class="absolute right-2 top-2 rounded-full bg-indigo-600 px-2 py-0.5 text-xs font-bold text-white">${keranjang[p.id]}</span>` : ''}
-        </div>
-        <div class="flex flex-1 flex-col p-3">
-          <h3 class="line-clamp-2 text-sm font-semibold leading-snug">${p.nama}</h3>
-          <p class="mt-1 text-sm font-bold text-indigo-600">${rp(p.harga)}</p>
-          <button data-add="${p.id}" class="mt-3 rounded-xl bg-indigo-50 py-2 text-sm font-semibold text-indigo-700 transition hover:bg-indigo-600 hover:text-white active:scale-95">+ Tambah</button>
-        </div>
-      </div>`).join('');
-  }
 
-  // ---------- RENDER KERANJANG ----------
-  function hitung() {
-    const subtotal = Object.entries(keranjang).reduce((s, [id, q]) => s + PRODUK.find(p => p.id == id).harga * q, 0);
-    const diskon = subtotal * (diskonPersen / 100);
-    const pajak = (subtotal - diskon) * PPN;
-    const total = subtotal - diskon + pajak;
-    const jumlah = Object.values(keranjang).reduce((a, b) => a + b, 0);
-    return { subtotal, diskon, pajak, total, jumlah };
-  }
 
-  function renderKeranjang() {
-    const ids = Object.keys(keranjang);
-    $('items').innerHTML = ids.length === 0
-      ? `<div class="flex h-full flex-col items-center justify-center text-center text-slate-400">
-           <div class="text-5xl">🛒</div><p class="mt-2 font-medium">Keranjang masih kosong</p><p class="text-xs">Pilih produk untuk memulai transaksi</p></div>`
-      : ids.map(id => {
-          const p = PRODUK.find(x => x.id == id), q = keranjang[id];
-          return `
-          <div class="flex items-center gap-3 rounded-2xl border border-slate-100 p-3">
-            <div class="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl ${WARNA[p.id % WARNA.length]} text-2xl">
-              ${p.img ? `<img src="${p.img}" class="h-full w-full object-cover" alt="">` : p.emoji}
-            </div>
-            <div class="min-w-0 flex-1">
-              <p class="truncate text-sm font-semibold">${p.nama}</p>
-              <p class="text-xs text-slate-500">${rp(p.harga)}</p>
-              <p class="mt-0.5 text-sm font-bold">${rp(p.harga * q)}</p>
-            </div>
-            <div class="flex items-center gap-1 rounded-xl bg-slate-100 p-1">
-              <button data-min="${id}" class="flex h-7 w-7 items-center justify-center rounded-lg bg-white text-lg font-bold shadow-sm hover:bg-rose-50 hover:text-rose-600">−</button>
-              <span class="w-6 text-center text-sm font-semibold">${q}</span>
-              <button data-plus="${id}" class="flex h-7 w-7 items-center justify-center rounded-lg bg-white text-lg font-bold shadow-sm hover:bg-indigo-50 hover:text-indigo-600">+</button>
-            </div>
-          </div>`;
-        }).join('');
+    /*
+     * ==========================================================
+     * 2. STATE
+     * ==========================================================
+     */
 
-    const h = hitung();
-    $('subtotal').textContent = rp(h.subtotal);
-    $('diskon').textContent = '- ' + rp(h.diskon);
-    $('pajak').textContent = rp(h.pajak);
-    $('total').textContent = rp(h.total);
-    $('totalFab').textContent = rp(h.total);
-    $('jmlItem').textContent = h.jumlah;
-    $('jmlItemFab').textContent = h.jumlah;
-    $('bayar').disabled = h.jumlah === 0;
-    $('bayar').textContent = h.jumlah ? `Bayar ${rp(h.total)}` : 'Bayar';
-  }
+    let cart = [];
 
-  function refresh() { renderGrid(); renderKeranjang(); }
 
-  // ---------- AKSI ----------
-  function ubahQty(id, delta) {
-    keranjang[id] = (keranjang[id] || 0) + delta;
-    if (keranjang[id] <= 0) delete keranjang[id];
-    refresh();
-  }
+    /*
+     * ==========================================================
+     * 3. DOM
+     * ==========================================================
+     */
 
-  $('grid').addEventListener('click', e => {
-    const b = e.target.closest('[data-add]'); if (b) ubahQty(b.dataset.add, 1);
-  });
-  $('items').addEventListener('click', e => {
-    const a = e.target.closest('[data-plus]'), m = e.target.closest('[data-min]');
-    if (a) ubahQty(a.dataset.plus, 1);
-    if (m) ubahQty(m.dataset.min, -1);
-  });
-  $('kategori').addEventListener('click', e => {
-    const b = e.target.closest('[data-k]'); if (!b) return;
-    kategoriAktif = b.dataset.k; renderKategori(); renderGrid();
-  });
-  $('cari').addEventListener('input', e => { kataCari = e.target.value; renderGrid(); });
-  $('diskonPersen').addEventListener('input', e => {
-    diskonPersen = Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)); renderKeranjang();
-  });
-  $('kosongkan').addEventListener('click', () => { keranjang = {}; refresh(); });
+    const productForm =
+      document.getElementById("productForm");
 
-  // Bottom sheet (mobile)
-  const bukaPanel = () => { $('panel').classList.remove('translate-y-full'); $('overlay').classList.remove('hidden'); };
-  const tutupPanel = () => { $('panel').classList.add('translate-y-full'); $('overlay').classList.add('hidden'); };
-  $('bukaPanel').addEventListener('click', bukaPanel);
-  $('tutupPanel').addEventListener('click', tutupPanel);
-  $('overlay').addEventListener('click', tutupPanel);
+    const productSku =
+      document.getElementById("productSku");
 
-  // ---------- PEMBAYARAN ----------
-  function updateKembalian() {
-    const { total } = hitung();
-    const uang = parseFloat($('uang').value) || 0;
-    const kembali = uang - Math.round(total);
-    $('kembalian').textContent = rp(Math.max(0, kembali));
-    $('kembalian').className = 'text-lg font-bold ' + (kembali >= 0 ? 'text-emerald-600' : 'text-rose-600');
-    $('konfirmasi').disabled = uang < Math.round(total);
-  }
+    const productName =
+      document.getElementById("productName");
 
-  $('bayar').addEventListener('click', () => {
-    const { total } = hitung();
-    const t = Math.round(total);
-    $('mTotal').textContent = rp(t);
-    $('uang').value = '';
-    const opsi = [...new Set([t, Math.ceil(t / 10000) * 10000, Math.ceil(t / 50000) * 50000, Math.ceil(t / 100000) * 100000])];
-    $('cepat').innerHTML = opsi.map(n => `<button data-uang="${n}" class="rounded-lg bg-slate-100 px-3 py-1.5 text-sm font-medium hover:bg-indigo-100 hover:text-indigo-700">${n === t ? 'Uang pas' : rp(n)}</button>`).join('');
-    updateKembalian();
-    $('modal').classList.replace('hidden', 'flex');
-    setTimeout(() => $('uang').focus(), 50);
-  });
-  $('cepat').addEventListener('click', e => {
-    const b = e.target.closest('[data-uang]'); if (!b) return;
-    $('uang').value = b.dataset.uang; updateKembalian();
-  });
-  $('uang').addEventListener('input', updateKembalian);
-  $('batal').addEventListener('click', () => $('modal').classList.replace('flex', 'hidden'));
-  $('konfirmasi').addEventListener('click', () => {
-    $('modal').classList.replace('flex', 'hidden');
-    keranjang = {}; diskonPersen = 0; $('diskonPersen').value = 0;
-    refresh(); tutupPanel();
-    toast('✅ Transaksi berhasil disimpan');
-  });
+    const productPrice =
+      document.getElementById("productPrice");
 
-  function toast(msg) {
-    const t = $('toast'); t.textContent = msg;
-    t.classList.remove('-translate-y-20', 'opacity-0');
-    setTimeout(() => t.classList.add('-translate-y-20', 'opacity-0'), 2200);
-  }
+    const productQty =
+      document.getElementById("productQty");
 
-  // ---------- INIT ----------
-  $('tanggal').textContent = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-  renderKategori();
-  refresh();
-</script>
+    const cartBody =
+      document.getElementById("cartBody");
+
+    const emptyCart =
+      document.getElementById("emptyCart");
+
+    const cartInfo =
+      document.getElementById("cartInfo");
+
+    const subtotalDisplay =
+      document.getElementById("subtotalDisplay");
+
+    const totalDisplay =
+      document.getElementById("totalDisplay");
+
+    const discountInput =
+      document.getElementById("discountInput");
+
+    const paymentInput =
+      document.getElementById("paymentInput");
+
+    const changeDisplay =
+      document.getElementById("changeDisplay");
+
+    const paymentMethod =
+      document.getElementById("paymentMethod");
+
+    const calculateButton =
+      document.getElementById("calculateButton");
+
+    const saveTransactionButton =
+      document.getElementById("saveTransactionButton");
+
+    const saveButtonText =
+      document.getElementById("saveButtonText");
+
+    const clearCartButton =
+      document.getElementById("clearCartButton");
+
+    const newTransactionButton =
+      document.getElementById("newTransactionButton");
+
+    const notification =
+      document.getElementById("notification");
+
+    const transactionCodeElement =
+      document.getElementById("transactionCode");
+
+
+    /*
+     * ==========================================================
+     * 4. FORMAT RUPIAH
+     * ==========================================================
+     */
+
+    function formatRupiah(value) {
+
+      const number =
+        Number(value) || 0;
+
+      return new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        maximumFractionDigits: 0
+      }).format(number);
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 5. GENERATE TRANSACTION CODE
+     * ==========================================================
+     */
+
+    function generateTransactionCode() {
+
+      const now = new Date();
+
+      const year =
+        now.getFullYear();
+
+      const month =
+        String(now.getMonth() + 1).padStart(2, "0");
+
+      const day =
+        String(now.getDate()).padStart(2, "0");
+
+      const random =
+        Math.floor(1000 + Math.random() * 9000);
+
+      return `TRX-${year}${month}${day}-${random}`;
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 6. RESET TRANSACTION CODE
+     * ==========================================================
+     */
+
+    function resetTransactionCode() {
+
+      transactionCodeElement.textContent =
+        generateTransactionCode();
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 7. NOTIFICATION
+     * ==========================================================
+     */
+
+    function showNotification(
+      message,
+      type = "success"
+    ) {
+
+      notification.className =
+        "mb-4 rounded-xl px-4 py-3 text-sm font-medium";
+
+      if (type === "success") {
+
+        notification.classList.add(
+          "bg-green-100",
+          "text-green-800",
+          "border",
+          "border-green-200"
+        );
+
+      } else {
+
+        notification.classList.add(
+          "bg-red-100",
+          "text-red-800",
+          "border",
+          "border-red-200"
+        );
+
+      }
+
+      notification.textContent =
+        message;
+
+      notification.classList.remove(
+        "hidden"
+      );
+
+      setTimeout(() => {
+
+        notification.classList.add(
+          "hidden"
+        );
+
+      }, 4000);
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 8. CALCULATE SUBTOTAL
+     * ==========================================================
+     */
+
+    function getSubtotal() {
+
+      return cart.reduce(
+        (total, item) => {
+
+          return total +
+            (item.price * item.qty);
+
+        },
+        0
+      );
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 9. GET DISCOUNT
+     * ==========================================================
+     */
+
+    function getDiscount() {
+
+      let discount =
+        Number(discountInput.value) || 0;
+
+      if (discount < 0) {
+        discount = 0;
+      }
+
+      return discount;
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 10. GET TOTAL
+     * ==========================================================
+     */
+
+    function getTotal() {
+
+      const subtotal =
+        getSubtotal();
+
+      const discount =
+        getDiscount();
+
+      return Math.max(
+        0,
+        subtotal - discount
+      );
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 11. UPDATE PAYMENT
+     * ==========================================================
+     */
+
+    function updatePaymentSummary() {
+
+      const subtotal =
+        getSubtotal();
+
+      const total =
+        getTotal();
+
+      const payment =
+        Number(paymentInput.value) || 0;
+
+      const change =
+        Math.max(
+          0,
+          payment - total
+        );
+
+
+      subtotalDisplay.textContent =
+        formatRupiah(subtotal);
+
+      totalDisplay.textContent =
+        formatRupiah(total);
+
+      changeDisplay.textContent =
+        formatRupiah(change);
+
+
+      if (payment < total && total > 0) {
+
+        changeDisplay.classList.remove(
+          "text-green-600"
+        );
+
+        changeDisplay.classList.add(
+          "text-red-600"
+        );
+
+      } else {
+
+        changeDisplay.classList.remove(
+          "text-red-600"
+        );
+
+        changeDisplay.classList.add(
+          "text-green-600"
+        );
+
+      }
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 12. RENDER CART
+     * ==========================================================
+     */
+
+    function renderCart() {
+
+      cartBody.innerHTML = "";
+
+
+      if (cart.length === 0) {
+
+        emptyCart.classList.remove(
+          "hidden"
+        );
+
+      } else {
+
+        emptyCart.classList.add(
+          "hidden"
+        );
+
+      }
+
+
+      const totalQty =
+        cart.reduce(
+          (sum, item) =>
+            sum + item.qty,
+          0
+        );
+
+
+      cartInfo.textContent =
+        `${totalQty} item`;
+
+
+      cart.forEach(
+        (item, index) => {
+
+          const row =
+            document.createElement("tr");
+
+          row.className =
+            "hover:bg-slate-50";
+
+
+          row.innerHTML = `
+
+            <td class="px-4 py-3">
+
+              <div class="font-semibold text-slate-800">
+                ${escapeHtml(item.name)}
+              </div>
+
+              <div class="text-xs text-slate-500">
+                ${escapeHtml(item.sku || "-")}
+              </div>
+
+            </td>
+
+
+            <td class="px-4 py-3 text-right whitespace-nowrap">
+              ${formatRupiah(item.price)}
+            </td>
+
+
+            <td class="px-4 py-3">
+
+              <div class="flex items-center justify-center gap-2">
+
+                <button
+                  type="button"
+                  onclick="changeQty(${index}, -1)"
+                  class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold">
+                  −
+                </button>
+
+                <input
+                  type="number"
+                  min="1"
+                  value="${item.qty}"
+                  onchange="setQty(${index}, this.value)"
+                  class="w-16 text-center rounded-lg border border-slate-300 py-1.5"
+                />
+
+                <button
+                  type="button"
+                  onclick="changeQty(${index}, 1)"
+                  class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 font-bold">
+                  +
+                </button>
+
+              </div>
+
+            </td>
+
+
+            <td class="px-4 py-3 text-right font-semibold whitespace-nowrap">
+
+              ${formatRupiah(
+                item.price * item.qty
+              )}
+
+            </td>
+
+
+            <td class="px-4 py-3 text-center">
+
+              <button
+                type="button"
+                onclick="removeItem(${index})"
+                class="text-red-600 hover:text-red-800 font-medium">
+                Hapus
+              </button>
+
+            </td>
+
+          `;
+
+
+          cartBody.appendChild(row);
+
+        }
+      );
+
+
+      updatePaymentSummary();
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 13. ESCAPE HTML
+     * ==========================================================
+     */
+
+    function escapeHtml(value) {
+
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 14. ADD PRODUCT
+     * ==========================================================
+     */
+
+    productForm.addEventListener(
+      "submit",
+      function(event) {
+
+        event.preventDefault();
+
+
+        const sku =
+          productSku.value.trim();
+
+        const name =
+          productName.value.trim();
+
+        const price =
+          Number(productPrice.value);
+
+        const qty =
+          Number(productQty.value);
+
+
+        if (!name) {
+
+          showNotification(
+            "Nama produk wajib diisi.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!Number.isFinite(price) || price < 0) {
+
+          showNotification(
+            "Harga produk tidak valid.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        if (!Number.isInteger(qty) || qty < 1) {
+
+          showNotification(
+            "Jumlah produk minimal 1.",
+            "error"
+          );
+
+          return;
+
+        }
+
+
+        /*
+         * Jika SKU sama, tambahkan qty
+         * daripada membuat baris baru.
+         */
+
+        const existingIndex =
+          cart.findIndex(
+            item =>
+              item.sku &&
+              sku &&
+              item.sku === sku
+          );
+
+
+        if (existingIndex !== -1) {
+
+          cart[existingIndex].qty += qty;
+
+        } else {
+
+          cart.push({
+
+            sku,
+            name,
+            price,
+            qty
+
+          });
+
+        }
+
+
+        productForm.reset();
+
+        productQty.value = 1;
+
+        renderCart();
+
+        productName.focus();
+
+      }
+    );
+
+
+    /*
+     * ==========================================================
+     * 15. CHANGE QTY
+     * ==========================================================
+     */
+
+    function changeQty(index, amount) {
+
+      if (!cart[index]) {
+        return;
+      }
+
+
+      cart[index].qty += amount;
+
+
+      if (cart[index].qty <= 0) {
+
+        cart.splice(index, 1);
+
+      }
+
+
+      renderCart();
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 16. SET QTY
+     * ==========================================================
+     */
+
+    function setQty(index, value) {
+
+      if (!cart[index]) {
+        return;
+      }
+
+
+      const qty =
+        Number(value);
+
+
+      if (!Number.isInteger(qty) || qty < 1) {
+
+        cart[index].qty = 1;
+
+      } else {
+
+        cart[index].qty = qty;
+
+      }
+
+
+      renderCart();
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 17. REMOVE ITEM
+     * ==========================================================
+     */
+
+    function removeItem(index) {
+
+      if (!cart[index]) {
+        return;
+      }
+
+
+      const item =
+        cart[index];
+
+
+      const confirmed =
+        confirm(
+          `Hapus "${item.name}" dari keranjang?`
+        );
+
+
+      if (!confirmed) {
+        return;
+      }
+
+
+      cart.splice(index, 1);
+
+      renderCart();
+
+    }
+
+
+    /*
+     * ==========================================================
+     * 18. CLEAR CART
+     * ==========================================================
+     */
+
+    clearCartButton.addEventListener(
+      "click",
+      function() {
+
+        if (cart.length === 0) {
+          return;
+        }
+
+
+        const confirmed =
+          confirm(
+            "Kosongkan seluruh keranjang?"
+          );
+
+
+        if (!confirmed) {
+          return;
+        }
+
+
+        cart = [];
+
+        renderCart();
+
+        paymentInput.value = 0;
+
+        discountInput.value = 0;
+
+        updatePaymentSummary();
+
+      }
+    );
+
+
+    /*
+     * ==========================================================
+     * 19. AUTO CALCULATE
+     * ==========================================================
+     */
+
+    discountInput.addEventListener(
+      "input",
+      updatePaymentSummary
+    );
+
+
+    paymentInput.addEventListener(
+      "input",
+      updatePaymentSummary
+    );
+
+
+    calculateButton.addEventListener(
+      "click",
+      function() {
+
+        updatePaymentSummary();
+
+        showNotification(
+          "Total pembayaran berhasil dihitung.",
+          "success"
+        );
+
+      }
+    );
+
+
+    /*
+     * ==========================================================
+     * 20. SAVE TRANSACTION
+     * ==========================================================
+     */
+
+    saveTransactionButton.addEventListener(
+      "click",
+      async function() {
+
+        try {
+
+          /*
+           * Validasi keranjang
+           */
+
+          if (cart.length === 0) {
+
+            showNotification(
+              "Keranjang masih kosong.",
+              "error"
+            );
+
+            return;
+
+          }
+
+
+          const subtotal =
+            getSubtotal();
+
+          const discount =
+            getDiscount();
+
+          const total =
+            getTotal();
+
+          const payment =
+            Number(paymentInput.value) || 0;
+
+
+          /*
+           * Untuk pembayaran tunai,
+           * uang dibayar harus cukup.
+           */
+
+          if (
+            paymentMethod.value === "cash" &&
+            payment < total
+          ) {
+
+            showNotification(
+              "Uang pembayaran masih kurang.",
+              "error"
+            );
+
+            paymentInput.focus();
+
+            return;
+
+          }
+
+
+          /*
+           * Untuk non-tunai kita anggap
+           * nilai pembayaran sama dengan total.
+           */
+
+          const actualPayment =
+            paymentMethod.value === "cash"
+              ? payment
+              : total;
+
+
+          const change =
+            Math.max(
+              0,
+              actualPayment - total
+            );
+
+
+          /*
+           * Disable tombol
+           */
+
+          saveTransactionButton.disabled =
+            true;
+
+          saveButtonText.textContent =
+            "Menyimpan...";
+
+
+          /*
+           * Data transaksi.
+           *
+           * items akan disimpan sebagai JSONB.
+           */
+
+          const transactionData = {
+
+            transaction_code:
+              transactionCodeElement.textContent,
+
+            total_amount:
+              total,
+
+            payment_amount:
+              actualPayment,
+
+            change_amount:
+              change,
+
+            items:
+              cart.map(item => ({
+
+                sku: item.sku,
+
+                name: item.name,
+
+                price: item.price,
+
+                qty: item.qty,
+
+                subtotal:
+                  item.price * item.qty
+
+              })),
+
+            payment_method:
+              paymentMethod.value,
+
+            created_at:
+              new Date().toISOString()
+
+          };
+
+
+          /*
+           * INSERT SUPABASE
+           */
+
+          const {
+            data,
+            error
+          } = await supabaseClient
+            .from("transactions")
+            .insert(transactionData)
+            .select()
+            .single();
+
+
+          if (error) {
+
+            console.error(
+              "Supabase error:",
+              error
+            );
+
+            throw new Error(
+              error.message ||
+              "Gagal menyimpan transaksi."
+            );
+
+          }
+
+
+          /*
+           * Sukses
+           */
+
+          console.log(
+            "Transaction saved:",
+            data
+          );
+
+
+          showNotification(
+            `Transaksi ${transactionData.transaction_code} berhasil disimpan.`,
+            "success"
+          );
+
+
+          /*
+           * Disable form transaksi
+           */
+
+          saveTransactionButton.disabled =
+            true;
+
+          newTransactionButton.classList.remove(
+            "hidden"
+          );
+
+
+        } catch (error) {
+
+          console.error(error);
+
+
+          showNotification(
+            error.message ||
+            "Terjadi kesalahan saat menyimpan transaksi.",
+            "error"
+          );
+
+
+          saveTransactionButton.disabled =
+            false;
+
+          saveButtonText.textContent =
+            "Simpan Transaksi";
+
+        }
+
+      }
+    );
+
+
+    /*
+     * ==========================================================
+     * 21. NEW TRANSACTION
+     * ==========================================================
+     */
+
+    newTransactionButton.addEventListener(
+      "click",
+      function() {
+
+        cart = [];
+
+        productForm.reset();
+
+        productQty.value = 1;
+
+        discountInput.value = 0;
+
+        paymentInput.value = 0;
+
+        paymentMethod.value = "cash";
+
+
+        resetTransactionCode();
+
+        renderCart();
+
+
+        saveTransactionButton.disabled =
+          false;
+
+        saveButtonText.textContent =
+          "Simpan Transaksi";
+
+
+        newTransactionButton.classList.add(
+          "hidden"
+        );
+
+
+        updatePaymentSummary();
+
+
+        productName.focus();
+
+      }
+    );
+
+
+    /*
+     * ==========================================================
+     * 22. INITIALIZE
+     * ==========================================================
+     */
+
+    resetTransactionCode();
+
+    renderCart();
+
+    updatePaymentSummary();
+
+  </script>
+
 </body>
 </html>
